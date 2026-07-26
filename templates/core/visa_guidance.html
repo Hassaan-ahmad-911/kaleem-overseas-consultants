@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Visa Guidance | Kaleem Overseas Consultants Pvt. Ltd.{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <h1 class="fw-bold text-white">Visa Guidance</h1>
+    <p class="text-white-50 mb-0">Clear steps, practical document advice, and support for visit and business visas.</p>
+  </div>
+</section>
+<section class="section-pad">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-4"><div class="form-panel h-100"><h5 class="fw-bold">1. Share Your Plan</h5><p class="mb-0 text-muted">Tell us your destination, travel purpose, and preferred dates.</p></div></div>
+      <div class="col-md-4"><div class="form-panel h-100"><h5 class="fw-bold">2. Prepare Documents</h5><p class="mb-0 text-muted">We guide you through the required forms, supporting papers, and booking details.</p></div></div>
+      <div class="col-md-4"><div class="form-panel h-100"><h5 class="fw-bold">3. Book an Appointment</h5><p class="mb-0 text-muted">Meet our team for a focused consultation and next-step guidance.</p></div></div>
+    </div>
+    <div class="text-center mt-4">
+      <a class="btn btn-gold" href="{% url 'book_appointment' %}">Book Appointment</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

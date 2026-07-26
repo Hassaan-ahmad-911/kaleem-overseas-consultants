@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ gallery_item.client_name }} | Success Gallery{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="{% static 'css/gallery.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="gallery-detail section-pad">
+  <div class="container">
+    <div class="gallery-detail__top" data-aos="fade-up">
+      <a href="{% url 'gallery' %}" class="gallery-back-link"><i class="fa-solid fa-arrow-left me-2"></i>Back to gallery</a>
+      <span class="gallery-badge">Visa Approved</span>
+    </div>
+    <div class="row g-4 align-items-start mt-2">
+      <div class="col-lg-7" data-aos="fade-up">
+        <div class="gallery-detail__image-wrap">
+          <img src="{{ gallery_item.image.url }}" alt="{{ gallery_item.client_name }} approval image" class="gallery-detail__image" loading="lazy">
+        </div>
+      </div>
+      <div class="col-lg-5" data-aos="fade-left">
+        <div class="gallery-detail__panel">
+          <span class="gallery-section-label">Success Story</span>
+          <h1>{{ gallery_item.client_name }}</h1>
+          <p class="gallery-detail__meta"><i class="fa-solid fa-location-dot me-2"></i>{{ gallery_item.country }}</p>
+          <span class="gallery-visa-pill mb-3 d-inline-flex">{{ gallery_item.get_visa_type_display }}</span>
+          {% if gallery_item.is_featured %}
+            <div class="gallery-featured-note"><i class="fa-solid fa-star me-2"></i>Featured success story</div>
+          {% endif %}
+          <p class="gallery-detail__caption">{{ gallery_item.caption }}</p>
+          <div class="gallery-detail__meta-line">
+            <span>Uploaded {{ gallery_item.created_at|date:"M d, Y" }}</span>
+            <a href="{% url 'gallery' %}" class="gallery-link">Browse all</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% if related_items %}
+      <div class="section-heading text-center mt-5 mb-4" data-aos="fade-up">
+        <span class="gallery-section-label">More Stories</span>
+        <h2 class="gallery-section-title">Related approvals</h2>
+      </div>
+      <div class="row g-4">
+        {% for item in related_items %}
+          <div class="col-md-6 col-xl-3" data-aos="fade-up">
+            <a href="{% url 'gallery_detail' item.pk %}" class="gallery-related-card">
+              <img src="{{ item.image.url }}" alt="{{ item.client_name }}" loading="lazy">
+              <div>
+                <strong>{{ item.client_name }}</strong>
+                <span>{{ item.country }}</span>
+              </div>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="{% static 'js/gallery.js' %}"></script>
+{% endblock %}

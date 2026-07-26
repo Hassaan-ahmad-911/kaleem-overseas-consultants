@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}Contact | Kaleem Overseas Consultants Pvt. Ltd.{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <h1 class="fw-bold text-white">Contact Us</h1>
+    <p class="text-white-50 mb-0">Send your inquiry or book an appointment for visa guidance and travel support.</p>
+  </div>
+</section>
+<section class="section-pad">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-5">
+        <div class="contact-card h-100 contact-info-card">
+          <span class="section-kicker">Office Details</span>
+          <h2 class="h4 fw-bold mt-2">Visit our office or connect online</h2>
+          <p class="mb-2"><i class="fa-solid fa-phone me-2 text-gold"></i>+92 308 6898079</p>
+          <p class="mb-2"><i class="fa-solid fa-envelope me-2 text-gold"></i>kaleemoverseasconsultants@gmail.com</p>
+          <p class="mb-3"><i class="fa-solid fa-location-dot me-2 text-gold"></i>HFWQ+3F5 Kaleem Overseas Consultants New, New Rasool Rd, Shadman Town, Mandi Bahauddin, Pakistan</p>
+
+          <div class="contact-social d-flex flex-wrap gap-2 mb-4">
+            <a href="https://www.instagram.com/kaleemoverseasconsultants?igsh=b3V5cHg0Z2VkeDF5" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary contact-social-btn"><i class="fa-brands fa-instagram me-2"></i>Instagram</a>
+            <a href="https://www.tiktok.com/@kaleemahmad984?_r=1&_t=ZS-97ZIcIKYRLZ" target="_blank" rel="noopener noreferrer" class="btn btn-outline-dark contact-social-btn"><i class="fa-brands fa-tiktok me-2"></i>TikTok</a>
+            <a href="https://wa.me/923086898079?text=Hello%20I%20want%20to%20book%20a%20visa%20consultation" target="_blank" rel="noopener noreferrer" class="btn btn-outline-success contact-social-btn"><i class="fa-brands fa-whatsapp me-2"></i>WhatsApp</a>
+          </div>
+
+          <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-gold" href="https://www.google.com/maps/search/?api=1&query=HFWQ%2B3F5%20Kaleem%20Overseas%20Consultants%20New%2C%20New%20Rasool%20Rd%2C%20Shadman%20Town%2C%20Mandi%20Bahauddin%2C%20Pakistan" target="_blank" rel="noopener noreferrer">Get Directions</a>
+            <a class="btn btn-outline-primary" href="{% url 'book_appointment' %}">Book Appointment</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-7">
+        <div class="contact-card h-100">
+          <h5 class="fw-bold mb-3">Send a Message</h5>
+          <form method="post" class="row g-3">
+            {% csrf_token %}
+            <div class="col-md-6">{{ contact_form.name.label_tag }}{{ contact_form.name }}</div>
+            <div class="col-md-6">{{ contact_form.phone.label_tag }}{{ contact_form.phone }}</div>
+            <div class="col-md-6">{{ contact_form.email.label_tag }}{{ contact_form.email }}</div>
+            <div class="col-md-6">{{ contact_form.subject.label_tag }}{{ contact_form.subject }}</div>
+            <div class="col-12">{{ contact_form.message.label_tag }}{{ contact_form.message }}</div>
+            <div class="col-12">
+              <button class="btn btn-gold" type="submit">Send Message</button>
+              <a class="btn btn-outline-primary ms-2" href="{% url 'book_appointment' %}">Book Appointment</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4 mt-1">
+      <div class="col-12">
+        <div class="contact-card contact-map-card">
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+            <div>
+              <span class="section-kicker">Google Maps</span>
+              <h2 class="h4 fw-bold mb-0">Find our office location</h2>
+            </div>
+            <a class="btn btn-outline-primary" href="https://www.google.com/maps/search/?api=1&query=HFWQ%2B3F5%20Kaleem%20Overseas%20Consultants%20New%2C%20New%20Rasool%20Rd%2C%20Shadman%20Town%2C%20Mandi%20Bahauddin%2C%20Pakistan" target="_blank" rel="noopener noreferrer">Open in Google Maps</a>
+          </div>
+          <div class="ratio ratio-16x9 contact-map-embed">
+            <iframe
+              src="https://www.google.com/maps?q=HFWQ%2B3F5%20Kaleem%20Overseas%20Consultants%20New%2C%20New%20Rasool%20Rd%2C%20Shadman%20Town%2C%20Mandi%20Bahauddin%2C%20Pakistan&output=embed"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Kaleem Overseas Consultants office location">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

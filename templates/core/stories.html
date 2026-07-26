@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Success Stories | Kaleem Overseas Consultants Pvt. Ltd.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/stories.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="stories-hero">
+  <div class="stories-hero__overlay"></div>
+  <div class="container position-relative">
+    <div class="stories-hero__content reveal">
+      <span class="section-kicker text-light-accent">Client Success Stories</span>
+      <h1 class="stories-hero__title">Real approvals. Real journeys.</h1>
+      <p class="stories-hero__lead">Watch short success stories from clients who trusted Kaleem Overseas Consultants for their visa and travel plans.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad stories-section">
+  <div class="container">
+    {% if success_stories %}
+      <div class="stories-grid">
+        {% for story in success_stories %}
+          <article class="story-card reveal" data-story-card>
+            <button type="button" class="story-card__trigger" data-story-open data-video-src="{{ story.video.url }}" data-story-title="{{ story.client_name }}" aria-label="Play {{ story.client_name }} success story">
+              <div class="story-card__media">
+                {% if story.thumbnail %}
+                  <img src="{{ story.thumbnail.url }}" alt="{{ story.client_name }} success story thumbnail" class="story-card__thumb" loading="lazy">
+                {% else %}
+                  <div class="story-card__thumb story-card__thumb--fallback">
+                    <i class="fa-solid fa-clapperboard"></i>
+                  </div>
+                {% endif %}
+                <span class="story-card__play"><i class="fa-solid fa-play"></i></span>
+                <span class="story-card__badge">{{ story.get_visa_type_display }}</span>
+              </div>
+            </button>
+            <div class="story-card__body">
+              <h2 class="story-card__name">{{ story.client_name }}</h2>
+              <p class="story-card__meta"><i class="fa-solid fa-location-dot me-2"></i>{{ story.country }}</p>
+              <p class="story-card__description">{{ story.description|truncatechars:120 }}</p>
+              <p class="story-card__date"><i class="fa-regular fa-calendar me-2"></i>{{ story.upload_date|date:"M d, Y" }}</p>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="stories-empty reveal">
+        <div class="stories-empty__icon"><i class="fa-regular fa-circle-play"></i></div>
+        <h2>Success stories coming soon</h2>
+        <p>New client video stories will appear here once uploaded from the admin panel.</p>
+        <a href="{% url 'book_appointment' %}" class="btn btn-apply-now">Book Appointment</a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<div class="story-modal" id="storyModal" hidden>
+  <div class="story-modal__backdrop" data-story-close></div>
+  <div class="story-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="storyModalTitle">
+    <button type="button" class="story-modal__close" data-story-close aria-label="Close video">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="story-modal__video-wrap">
+      <video id="storyModalVideo" class="story-modal__video" controls playsinline preload="metadata"></video>
+    </div>
+    <h2 class="story-modal__title" id="storyModalTitle"></h2>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/stories.js' %}"></script>
+{% endblock %}

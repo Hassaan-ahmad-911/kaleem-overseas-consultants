@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% block title %}About Us | Kaleem Overseas Consultants Pvt. Ltd.{% endblock %}
+{% block content %}
+<section class="about-hero-section">
+  <div class="about-hero-bg about-hero-bg-one"></div>
+  <div class="about-hero-bg about-hero-bg-two"></div>
+  <div class="about-hero-map"></div>
+  <div class="container position-relative">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6 reveal">
+        <span class="about-kicker"><i class="fa-solid fa-plane-departure me-2"></i>International Visa Consultancy</span>
+        <h1 class="about-hero-title mt-3">About Us</h1>
+        <p class="about-hero-subtitle mb-3">Your Dream, Our Guidance</p>
+        <p class="about-hero-copy">Kaleem Overseas Consultants Pvt. Ltd. is a trusted visa consultancy and travel services company dedicated to providing reliable visit visa assistance, travel consultancy, and customized international tour solutions for individuals, families, and business travelers.</p>
+        <p class="about-hero-copy">Founded with a vision to deliver honest consultancy and quality travel support, our company has become a trusted name for clients seeking smooth visa processing and professional travel management services.</p>
+        <p class="about-hero-copy">Under the leadership of Mr. Kaleem Ahmed, Owner &amp; Director, the company continues to grow with a strong focus on professionalism, customer satisfaction, and transparent consultancy services.</p>
+        <div class="d-flex flex-wrap gap-3 mt-4">
+          <a class="btn btn-about-primary" href="{% url 'contact' %}">Contact Us</a>
+          <a class="btn btn-about-outline" href="{% url 'book_appointment' %}">Book Appointment</a>
+        </div>
+      </div>
+      <div class="col-lg-6 reveal">
+        <div class="about-visual-card">
+          <div class="about-glow about-glow-one"></div>
+          <div class="about-glow about-glow-two"></div>
+          <div class="about-float about-float-plane"><i class="fa-solid fa-plane"></i></div>
+          <div class="about-float about-float-globe"><i class="fa-solid fa-earth-asia"></i></div>
+          <div class="about-passport-chip">Passport Ready</div>
+          <img src="{{ MEDIA_URL }}ceo.jpeg" alt="Mr. Kaleem Ahmed, Owner &amp; CEO" class="about-ceo-image">
+          <div class="about-ceo-card glass-card">
+            <span class="about-ceo-name">Mr. Kaleem Ahmed</span>
+            <span class="about-ceo-role">Owner &amp; Director</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad about-section-surface">
+  <div class="container">
+    <div class="section-heading text-center reveal mb-4 mb-lg-5">
+      <span class="section-kicker">Our Story</span>
+      <h2 class="section-title mt-3">Mission and vision built on trust</h2>
+      <p class="section-lead mb-0">A premium consultancy experience centered on clear guidance, quality service, and dependable international travel support.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-lg-6 reveal">
+        <div class="mission-card premium-glass-card h-100">
+          <div class="mission-icon"><i class="fa-solid fa-bullseye"></i></div>
+          <h3>Our Mission</h3>
+          <p>To provide reliable visit visa and business visa consultancy, together with professional travel services, in a simple and trustworthy way.</p>
+        </div>
+      </div>
+      <div class="col-lg-6 reveal">
+        <div class="mission-card premium-glass-card vision-card h-100">
+          <div class="mission-icon"><i class="fa-solid fa-eye"></i></div>
+          <h3>Our Vision</h3>
+          <p>To become a trusted and recognized name in visit visa, business visa, and travel services through quality support and customer satisfaction.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad about-section-surface about-choose-section" id="packages">
+  <div class="container">
+    <div class="section-heading text-center reveal mb-4 mb-lg-5">
+      <span class="section-kicker">Why Us</span>
+      <h2 class="section-title mt-3">Why Choose Us</h2>
+      <p class="section-lead mb-0">Premium support, clean documentation, and a client-focused process designed for smooth travel outcomes.</p>
+    </div>
+    <div class="row g-4 row-cols-1 row-cols-sm-2 row-cols-lg-4">
+      <div class="col reveal"><div class="choose-card premium-glass-card"><i class="fa-solid fa-user-tie"></i><h3>Professional Visa Guidance</h3></div></div>
+      <div class="col reveal"><div class="choose-card premium-glass-card"><i class="fa-solid fa-suitcase-rolling"></i><h3>Reliable Tour Management</h3></div></div>
+      <div class="col reveal"><div class="choose-card premium-glass-card"><i class="fa-solid fa-route"></i><h3>Complete Travel Solutions</h3></div></div>
+      <div class="col reveal"><div class="choose-card premium-glass-card"><i class="fa-solid fa-handshake-angle"></i><h3>Honest Consultancy Services</h3></div></div>
+      <div class="col reveal"><div class="choose-card premium-glass-card"><i class="fa-solid fa-file-shield"></i><h3>Smooth Documentation Process</h3></div></div>
+      <div class="col reveal"><div class="choose-card premium-glass-card"><i class="fa-solid fa-headset"></i><h3>Customer-Focused Support</h3></div></div>
+      <div class="col reveal"><div class="choose-card premium-glass-card"><i class="fa-solid fa-tags"></i><h3>Affordable &amp; Customized Packages</h3></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad about-message-section">
+  <div class="container">
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-7 reveal">
+        <div class="message-card premium-glass-card quote-card h-100">
+          <div class="quote-mark"><i class="fa-solid fa-quote-left"></i></div>
+          <p>At Kaleem Overseas Consultants Pvt. Ltd., our mission is to provide professional visa consultancy and high-quality travel services with honesty and dedication.</p>
+          <p class="mb-4">We strive to make every client’s travel experience smooth, safe, and memorable. Our commitment is to guide and support our customers with transparency, professionalism, and reliable service at every step.</p>
+          <div class="message-signature">
+            <strong>Mr. Kaleem Ahmed</strong>
+            <span>Owner &amp; Director</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5 reveal">
+        <div class="message-image-card">
+          <img src="{{ MEDIA_URL }}ceo.jpeg" alt="Mr. Kaleem Ahmed" class="message-image">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="commitment-section section-pad" id="testimonials">
+  <div class="commitment-overlay"></div>
+  <div class="commitment-plane"><i class="fa-solid fa-plane-up"></i></div>
+  <div class="commitment-passport"><i class="fa-solid fa-passport"></i></div>
+  <div class="container position-relative">
+    <div class="row justify-content-center">
+      <div class="col-lg-10 reveal">
+        <div class="commitment-card glass-card text-center">
+          <span class="section-kicker justify-content-center">Our Commitment</span>
+          <h2 class="section-title mt-3">A travel experience built on trust and care</h2>
+          <p class="section-lead mb-0">At Kaleem Overseas Consultants Pvt. Ltd., customer satisfaction is at the heart of everything we do. We are committed to delivering trustworthy consultancy services, professional travel solutions, and dependable support to help our clients travel confidently.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

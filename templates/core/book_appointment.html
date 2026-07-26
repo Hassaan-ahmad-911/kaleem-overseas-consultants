@@ -1,0 +1,271 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Book Appointment | Kaleem Overseas Consultants Pvt. Ltd.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="{% static 'css/appointment.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="appointment-hero">
+  <div class="appointment-hero__overlay"></div>
+  <div class="container position-relative h-100">
+    <div class="row align-items-center gy-3 py-2 appointment-hero__layout appointment-hero__layout--compact">
+      <div class="col-12">
+        <div class="appointment-hero__content appointment-hero__content--compact text-center text-lg-start">
+          <span class="appointment-kicker"><i class="bi bi-globe2"></i> Premium Visa Consultancy</span>
+          <h1>Book Your Appointment</h1>
+          <p class="appointment-hero__lead mx-auto mx-lg-0">Schedule a consultation with our professional visa consultants and begin your journey today.</p>
+          <div class="d-flex flex-column flex-sm-row justify-content-center justify-content-lg-start gap-3 mt-4">
+            <a href="#appointment-form" class="btn appointment-btn appointment-btn--submit px-4">
+              <i class="bi bi-calendar-check me-2"></i>Book Appointment
+            </a>
+            <a href="{% url 'appointment_status' %}" class="btn appointment-btn appointment-btn--status px-4">
+              Check Status
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="appointment-main section-pad">
+  <div class="container">
+    <div class="row g-4 align-items-start">
+      <div class="col-lg-4">
+        <div class="appointment-side-card appointment-side-card--main h-100">
+          <div class="appointment-side-card__header">
+            <span class="appointment-side-card__eyebrow">Why Book With Us?</span>
+            <h2>Why Book With Us?</h2>
+          </div>
+          <div class="appointment-side-list">
+            <div class="appointment-side-list__item">
+              <span><i class="bi bi-award-fill"></i></span>
+              <div>
+                <h3>Experienced Visa Consultants</h3>
+                <p>Work with specialists who understand complex travel requirements.</p>
+              </div>
+            </div>
+            <div class="appointment-side-list__item">
+              <span><i class="bi bi-graph-up-arrow"></i></span>
+              <div>
+                <h3>High Success Rate</h3>
+                <p>Benefit from a process built around quality and consistency.</p>
+              </div>
+            </div>
+            <div class="appointment-side-list__item">
+              <span><i class="bi bi-compass-fill"></i></span>
+              <div>
+                <h3>Personalized Guidance</h3>
+                <p>Get recommendations based on your trip purpose and profile.</p>
+              </div>
+            </div>
+            <div class="appointment-side-list__item">
+              <span><i class="bi bi-hourglass-split"></i></span>
+              <div>
+                <h3>Save Time &amp; Effort</h3>
+                <p>Move forward with a streamlined appointment and support process.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="appointment-support-card mt-4">
+          <span class="appointment-side-card__eyebrow">Need Help?</span>
+          <h2>Need Help?</h2>
+          <div class="appointment-support-card__block">
+            <span class="appointment-support-card__icon"><i class="bi bi-telephone-fill"></i></span>
+            <span>Phone Number</span>
+            <strong>+92 308 6898079</strong>
+          </div>
+          <div class="appointment-support-card__block">
+            <span class="appointment-support-card__icon"><i class="bi bi-clock-fill"></i></span>
+            <span>Business Hours</span>
+            <strong>Monday – Saturday</strong>
+            <small>9 AM – 6 PM</small>
+          </div>
+          <a class="btn appointment-btn appointment-btn--support w-100" href="tel:+923086898079">
+            <i class="bi bi-telephone-fill me-2"></i>Call Now
+          </a>
+        </div>
+      </div>
+
+      <div class="col-lg-8">
+        <div class="appointment-form-card">
+          <div class="appointment-form-card__header">
+            <span class="appointment-side-card__eyebrow">Appointment Details</span>
+            <h2>Appointment Details</h2>
+            <p>Complete the form below and our team will review your consultation request.</p>
+          </div>
+
+          <form method="post" class="appointment-form">
+            {% csrf_token %}
+            {% if appointment_form.non_field_errors %}
+              <div class="alert alert-danger border-0 rounded-4 mb-4">{{ appointment_form.non_field_errors }}</div>
+            {% endif %}
+
+            <div class="row g-4">
+              <div class="col-md-6">
+                <div class="appointment-field">
+                  {{ appointment_form.full_name.label_tag }}
+                  <div class="appointment-input-wrap">
+                    <span class="appointment-input-icon"><i class="bi bi-person-fill"></i></span>
+                    {{ appointment_form.full_name }}
+                  </div>
+                  {{ appointment_form.full_name.errors }}
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="appointment-field">
+                  {{ appointment_form.phone_number.label_tag }}
+                  <div class="appointment-input-wrap">
+                    <span class="appointment-input-icon"><i class="bi bi-telephone-fill"></i></span>
+                    {{ appointment_form.phone_number }}
+                  </div>
+                  {{ appointment_form.phone_number.errors }}
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="appointment-field">
+                  {{ appointment_form.email.label_tag }}
+                  <div class="appointment-input-wrap">
+                    <span class="appointment-input-icon"><i class="bi bi-envelope-fill"></i></span>
+                    {{ appointment_form.email }}
+                  </div>
+                  {{ appointment_form.email.errors }}
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="appointment-field">
+                  {{ appointment_form.city.label_tag }}
+                  <div class="appointment-input-wrap">
+                    <span class="appointment-input-icon"><i class="bi bi-geo-alt-fill"></i></span>
+                    {{ appointment_form.city }}
+                  </div>
+                  {{ appointment_form.city.errors }}
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="appointment-field">
+                  {{ appointment_form.visa_type.label_tag }}
+                  <div class="appointment-input-wrap">
+                    <span class="appointment-input-icon"><i class="bi bi-airplane-fill"></i></span>
+                    {{ appointment_form.visa_type }}
+                  </div>
+                  {{ appointment_form.visa_type.errors }}
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="appointment-field">
+                  {{ appointment_form.country.label_tag }}
+                  <div class="appointment-input-wrap">
+                    <span class="appointment-input-icon"><i class="bi bi-globe2"></i></span>
+                    {{ appointment_form.country }}
+                  </div>
+                  {{ appointment_form.country.errors }}
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="appointment-field">
+                  {{ appointment_form.preferred_date.label_tag }}
+                  <div class="appointment-input-wrap">
+                    <span class="appointment-input-icon"><i class="bi bi-calendar-event-fill"></i></span>
+                    {{ appointment_form.preferred_date }}
+                  </div>
+                  {{ appointment_form.preferred_date.errors }}
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="appointment-field">
+                  {{ appointment_form.preferred_time.label_tag }}
+                  <div class="appointment-input-wrap">
+                    <span class="appointment-input-icon"><i class="bi bi-clock-fill"></i></span>
+                    {{ appointment_form.preferred_time }}
+                  </div>
+                  {{ appointment_form.preferred_time.errors }}
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="appointment-field">
+                  {{ appointment_form.message.label_tag }}
+                  <div class="appointment-input-wrap appointment-input-wrap--textarea">
+                    <span class="appointment-input-icon appointment-input-icon--textarea"><i class="bi bi-chat-left-text-fill"></i></span>
+                    {{ appointment_form.message }}
+                  </div>
+                  {{ appointment_form.message.errors }}
+                </div>
+              </div>
+
+              <div class="col-12">
+                <button class="btn appointment-btn appointment-btn--submit w-100" type="submit">
+                  <i class="bi bi-calendar-check me-2"></i>Submit Appointment
+                </button>
+                <p class="appointment-security-note mb-0"><i class="bi bi-shield-lock-fill"></i> Your information is 100% secure and confidential.</p>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="appointment-status-wrap section-pad pt-0">
+  <div class="container">
+    <div class="appointment-status-card">
+      <div class="appointment-status-card__content">
+        <div class="appointment-status-card__icon"><i class="bi bi-receipt-cutoff"></i></div>
+        <div>
+          <h2>Already booked?</h2>
+          <p>Check your appointment status, download your appointment PDF after approval, or reschedule if necessary.</p>
+        </div>
+      </div>
+      <a href="{% url 'appointment_status' %}" class="btn appointment-btn appointment-btn--status">
+        Check Appointment Status <i class="bi bi-arrow-right ms-2"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="appointment-benefits section-pad pt-0">
+  <div class="container">
+    <div class="row g-3">
+      <div class="col-md-6 col-lg-3">
+        <div class="benefit-card">
+          <div class="benefit-card__icon"><i class="bi bi-lightning-charge-fill"></i></div>
+          <h3>Fast Response</h3>
+          <p>Quick follow-up from a team that values your time.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="benefit-card">
+          <div class="benefit-card__icon"><i class="bi bi-person-badge-fill"></i></div>
+          <h3>Expert Guidance</h3>
+          <p>Clear, practical support from experienced consultants.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="benefit-card">
+          <div class="benefit-card__icon"><i class="bi bi-lock-fill"></i></div>
+          <h3>Secure Process</h3>
+          <p>Handle your information through a safe, confidential workflow.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="benefit-card">
+          <div class="benefit-card__icon"><i class="bi bi-calendar2-week-fill"></i></div>
+          <h3>Convenient Booking</h3>
+          <p>Book your consultation at a time that suits your schedule.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

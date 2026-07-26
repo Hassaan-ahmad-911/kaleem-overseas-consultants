@@ -1,0 +1,283 @@
+{% extends 'base.html' %}
+{% block title %}Home | Kaleem Overseas Consultant{% endblock %}
+{% block content %}
+<section class="hero-section" id="home">
+  <div class="hero-overlay"></div>
+  <div class="hero-image-layer">
+    <img src="{{ MEDIA_URL }}background.png" alt="Travel and visa background" class="hero-background-image">
+  </div>
+  <div class="floating-element floating-one"></div>
+  <div class="floating-element floating-two"></div>
+  <div class="floating-element floating-three"></div>
+  <div class="container position-relative">
+    <div class="row align-items-center g-5 hero-layout">
+      <div class="col-lg-6 hero-copy reveal">
+        <span class="eyebrow-badge">International Visa Consultancy</span>
+        <h1 class="hero-title mt-3">Your Dream, Our Guidance</h1>
+        <p class="hero-description mt-4">Visit Visa, Business Visa, and Travel Services With Trusted Consultants</p>
+        <p class="hero-description hero-description-secondary mt-3">We make your overseas journey smooth and successful. Trusted guidance for visa support, documentation, appointments, and travel planning.</p>
+        <div class="d-flex flex-wrap gap-3 mt-4 hero-actions">
+          <a href="{% url 'book_appointment' %}" class="btn btn-apply-now btn-lg"><i class="fa-solid fa-calendar-check me-2"></i>Book Appointment</a>
+          <a href="#services" class="btn btn-explore btn-lg"><i class="fa-solid fa-arrow-right me-2"></i>Our Services</a>
+        </div>
+      </div>
+      <div class="col-lg-6 hero-visual reveal"></div>
+    </div>
+  </div>
+</section>
+
+<section class="hero-strip-wrap">
+  <div class="container">
+    <div class="hero-stat-strip reveal">
+      <div class="stat-item">
+        <div class="stat-icon navy"><i class="fa-solid fa-user-graduate"></i></div>
+        <div>
+          <span class="stat-title">Expert Counselors</span>
+          <span class="stat-label-dark">Experienced professionals guiding your way</span>
+        </div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon red"><i class="fa-solid fa-chart-line"></i></div>
+        <div>
+          <span class="stat-title">High Success Rate</span>
+          <span class="stat-label-dark">Thousands of successful visa approvals</span>
+        </div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon navy"><i class="fa-solid fa-clock"></i></div>
+        <div>
+          <span class="stat-title">Fast Processing</span>
+          <span class="stat-label-dark">Quick documentation & visa support</span>
+        </div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon red"><i class="fa-solid fa-headset"></i></div>
+        <div>
+          <span class="stat-title">End to End Support</span>
+          <span class="stat-label-dark">We are with you from start to finish</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad why-choose-section">
+  <div class="container">
+    <div class="section-heading text-center reveal">
+      <span class="section-kicker">Why Choose Us</span>
+      <h2 class="section-title">A refined consultancy experience built around trust</h2>
+      <p class="section-lead">We pair premium service with practical execution so clients feel guided, informed, and confident at every stage.</p>
+    </div>
+    <div class="row g-4 mt-1">
+      <div class="col-md-6 col-xl-3 reveal">
+        <div class="feature-card h-100">
+          <div class="feature-icon"><i class="fa-solid fa-user-tie"></i></div>
+          <h3>Expert Counselors</h3>
+          <p>Experienced professionals tailor guidance to your destination, visa category, and timeline.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-xl-3 reveal">
+        <div class="feature-card h-100">
+          <div class="feature-icon gold"><i class="fa-solid fa-file-shield"></i></div>
+          <h3>Document Accuracy</h3>
+          <p>We review submissions with precision to reduce errors and strengthen every application.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-xl-3 reveal">
+        <div class="feature-card h-100">
+          <div class="feature-icon red"><i class="fa-solid fa-clock"></i></div>
+          <h3>Fast Turnaround</h3>
+          <p>Efficient workflows keep your application moving with clear updates and fewer delays.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-xl-3 reveal">
+        <div class="feature-card h-100">
+          <div class="feature-icon"><i class="fa-solid fa-headset"></i></div>
+          <h3>Continuous Support</h3>
+          <p>From first enquiry to final submission, we stay responsive and easy to reach.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad services-section bg-services-white" id="services">
+  <div class="container">
+    <div class="section-heading text-center reveal">
+      <span class="section-kicker">What We Offer</span>
+      <h2 class="section-title">Our Services</h2>
+      <p class="section-lead">Premium visa and travel support crafted for visitors, families, business travelers, and international trip planning.</p>
+    </div>
+    <div class="row g-4 mt-1">
+      {% for service in services %}
+      <div class="col-md-6 col-xl-4 col-xxl-2-4 reveal">
+        <div class="service-glass h-100">
+          <div class="service-icon">
+            {% if service.icon %}
+              <i class="{{ service.icon }}"></i>
+            {% else %}
+              <i class="fa-solid fa-star"></i>
+            {% endif %}
+          </div>
+          <h3>{{ service.name }}</h3>
+          <p>{{ service.description }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section-pad countries-section" id="countries">
+  <div class="container">
+    <div class="section-heading text-center reveal">
+      <span class="section-kicker">Popular Destinations</span>
+      <h2 class="section-title">Countries we regularly support</h2>
+      <p class="section-lead">Choose from the most requested visit and business visa destinations supported by our team.</p>
+    </div>
+    <div class="row g-4 mt-1">
+      {% for country in countries %}
+      <div class="col-md-6 col-xl-4 reveal">
+        <div class="country-card premium-card h-100">
+          <div class="country-flag">🌍</div>
+          <h3>{{ country.name }}</h3>
+          <p>{{ country.description }}</p>
+          <a href="{% url 'countries' %}" class="text-link">View details <i class="fa-solid fa-arrow-right-long ms-1"></i></a>
+        </div>
+      </div>
+      {% endfor %}
+      <div class="col-md-6 col-xl-4 reveal">
+        <div class="country-card premium-card h-100 country-summary">
+          <div class="summary-badge"><i class="fa-solid fa-earth-americas"></i></div>
+          <h3>More Destinations</h3>
+          <p>View the full destination list to explore additional visit and business visa opportunities.</p>
+          <a href="{% url 'countries' %}" class="text-link">View all countries <i class="fa-solid fa-arrow-right-long ms-1"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad stats-section">
+  <div class="container">
+    <div class="section-heading text-center reveal">
+      <span class="section-kicker">Success Statistics</span>
+      <h2 class="section-title">Measured results that build confidence</h2>
+    </div>
+    <div class="row g-4 mt-1">
+      <div class="col-md-6 col-xl-3 reveal"><div class="metric-card"><span>{{ appointments_count|default:'0' }}</span><p>Appointments booked</p></div></div>
+      <div class="col-md-6 col-xl-3 reveal"><div class="metric-card accent"><span>98%</span><p>Client satisfaction</p></div></div>
+      <div class="col-md-6 col-xl-3 reveal"><div class="metric-card"><span>17</span><p>Supported countries</p></div></div>
+      <div class="col-md-6 col-xl-3 reveal"><div class="metric-card accent"><span>24/7</span><p>Guidance availability</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad gallery-preview-section">
+  <div class="container">
+    <div class="section-heading text-center reveal">
+      <span class="section-kicker">Success Gallery</span>
+      <h2 class="section-title">Previously available approval stories</h2>
+      <p class="section-lead">A quick look at a few client success stories. Open the full gallery for more approved cases.</p>
+    </div>
+    <div class="row g-4 mt-1">
+      {% for item in gallery_items %}
+        <div class="col-md-6 col-xl-4 reveal">
+          <div class="premium-card h-100 overflow-hidden">
+            <div class="ratio ratio-4x3">
+              <img src="{{ item.image.url }}" alt="{{ item.client_name }} approval story" class="w-100 h-100 object-fit-cover" loading="lazy">
+            </div>
+            <div class="p-4">
+              <div class="d-flex justify-content-between align-items-center gap-3 mb-2">
+                <h3 class="h5 mb-0">{{ item.client_name }}</h3>
+                <span class="gallery-visa-pill">{{ item.get_visa_type_display }}</span>
+              </div>
+              <p class="mb-3">{{ item.caption|truncatechars:110 }}</p>
+              <div class="d-flex align-items-center justify-content-between gap-3">
+                <span class="text-muted"><i class="fa-solid fa-location-dot me-2"></i>{{ item.country }}</span>
+                <a href="{% url 'gallery_detail' item.pk %}" class="text-link">Open story <i class="fa-solid fa-arrow-right-long ms-1"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <div class="col-12 reveal">
+          <div class="premium-card p-4 text-center">
+            <p class="mb-0">Add gallery entries in the admin panel to display approval stories here.</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-4 reveal">
+      <a href="{% url 'gallery' %}" class="btn btn-apply-now btn-lg">View Full Gallery</a>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad testimonials-section bg-soft-navy" id="testimonials">
+  <div class="container">
+    <div class="section-heading text-center reveal">
+      <span class="section-kicker text-light-accent">Client Reviews</span>
+      <h2 class="section-title text-white">Stories from successful applicants</h2>
+      <p class="section-lead text-white-50">Read and watch feedback from clients who trusted us with important travel decisions.</p>
+    </div>
+    <div class="row g-4 mt-1">
+      {% for testimonial in testimonials %}
+        <div class="col-md-4 reveal">
+          <div class="testimonial-card premium-testimonial h-100">
+            <div class="testimonial-quote"><i class="fa-solid fa-quote-left"></i></div>
+            <p>{{ testimonial.review }}</p>
+            {% if testimonial.video %}
+            <div class="ratio ratio-16x9 mb-3 rounded-4 overflow-hidden border border-white border-opacity-10">
+              <video controls class="w-100 h-100" preload="metadata">
+                <source src="{{ testimonial.video.url }}">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            {% endif %}
+            <div class="testimonial-meta">
+              <div class="testimonial-avatar">{{ testimonial.name|slice:":1" }}</div>
+              <div>
+                <h3>{{ testimonial.name }}</h3>
+                <span>{{ testimonial.country }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <div class="col-12 reveal"><p class="text-white-50 text-center mb-0">Add testimonials in the admin panel to display social proof.</p></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section-pad consultation-section" id="consultation">
+  <div class="container">
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-5 reveal">
+        <div class="consultation-copy">
+          <span class="section-kicker">Book Appointment</span>
+          <h2 class="section-title">Schedule a consultation with our team</h2>
+          <p class="section-lead">Reserve a time for visa guidance, document review, or travel planning support.</p>
+          <div class="consultation-note">
+            <i class="fa-solid fa-circle-check me-2"></i>
+            Fast response for visit visas, business visas, and travel consultation.
+          </div>
+          <div class="d-flex flex-wrap gap-3 mt-4">
+            <a href="{% url 'book_appointment' %}" class="btn btn-apply-now btn-lg">Book Appointment</a>
+            <a href="{% url 'contact' %}" class="btn btn-explore btn-lg">Send Inquiry</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-7 reveal">
+        <div class="consultation-form-panel">
+          <div class="text-center py-4">
+            <h3 class="h5 fw-bold mb-2">Need quick help?</h3>
+            <p class="form-hint mb-0">Use the contact form or appointment page to reach our team directly.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

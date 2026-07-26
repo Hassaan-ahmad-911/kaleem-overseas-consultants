@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Tour Packages | Kaleem Overseas Consultants Pvt. Ltd.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="{% static 'css/packages.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="packages-hero">
+  <div class="packages-hero__overlay"></div>
+  <div class="container position-relative">
+    <div class="row align-items-center gy-4">
+      <div class="col-lg-7" data-aos="fade-up">
+        <span class="packages-kicker">Tour Packages</span>
+        <h1 class="packages-title">Explore Our International Travel Packages</h1>
+        <p class="packages-lead">Browse premium travel package cards uploaded directly from the Django Admin Panel and present them in a clean, modern layout.</p>
+      </div>
+      <div class="col-lg-5" data-aos="fade-left">
+        <div class="packages-hero-card">
+          <div class="packages-hero-stat">
+            <span>{{ tour_packages|length }}</span>
+            <p>Packages available</p>
+          </div>
+          <div class="packages-hero-note">
+            <i class="fa-solid fa-suitcase-rolling"></i>
+            <div>
+              <strong>Simple admin workflow</strong>
+              <p class="mb-0">Upload package image and description only, then publish instantly.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad packages-section">
+  <div class="container">
+    <div class="row g-4">
+      {% for package in tour_packages %}
+        <div class="col-md-6 col-xl-4" data-aos="fade-up" data-aos-delay="{% widthratio forloop.counter 1 60 %}">
+          <article class="package-card h-100">
+            <div class="package-card__media">
+              <img src="{{ package.image.url }}" alt="Tour package image" loading="lazy">
+            </div>
+            <div class="package-card__body">
+              <p class="package-card__label">Premium Travel Package</p>
+              <p class="package-card__description">{{ package.description }}</p>
+              <div class="package-card__meta">
+                <span><i class="fa-regular fa-clock me-2"></i>{{ package.created_at|date:"M d, Y" }}</span>
+                <a href="{% url 'package_detail' package.pk %}" class="package-card__link">Open Story</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      {% empty %}
+        <div class="col-12" data-aos="fade-up">
+          <div class="packages-empty">
+            <i class="fa-solid fa-image"></i>
+            <h3>No tour packages yet</h3>
+            <p>Add your first package image and description from the admin panel to start showcasing travel offers.</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    if (typeof AOS !== 'undefined') {
+      AOS.init({ duration: 700, once: true, offset: 50, easing: 'ease-out-cubic' });
+    }
+  </script>
+{% endblock %}

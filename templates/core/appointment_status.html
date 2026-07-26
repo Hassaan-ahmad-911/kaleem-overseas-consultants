@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}Appointment Status | Kaleem Overseas Consultants Pvt. Ltd.{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <h1 class="fw-bold text-white">Appointment Status</h1>
+    <p class="text-white-50 mb-0">Check your appointment details and approval status.</p>
+  </div>
+</section>
+
+<section class="section-pad">
+  <div class="container">
+    <div class="row g-4 justify-content-center">
+      <div class="col-lg-5">
+        <div class="form-panel h-100">
+          <h2 class="h4 fw-bold mb-3">Look up your appointment</h2>
+          <form method="get" class="row g-3">
+            <div class="col-12">{{ lookup_form.appointment_number.label_tag }}{{ lookup_form.appointment_number }}</div>
+            <div class="col-12">{{ lookup_form.appointment_number.errors }}</div>
+            <div class="col-12">{{ lookup_form.phone_number.label_tag }}{{ lookup_form.phone_number }}</div>
+            <div class="col-12">{{ lookup_form.phone_number.errors }}</div>
+            <div class="col-12">
+              <button class="btn btn-gold px-4" type="submit">View Status</button>
+            </div>
+          </form>
+          <p class="text-muted small mt-3 mb-0">You can check the appointment with just the appointment number. Phone number helps confirm the record.</p>
+        </div>
+      </div>
+
+      <div class="col-lg-7">
+        {% if appointment %}
+        <div class="premium-card p-4 h-100">
+          <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+            <div>
+              <span class="section-kicker">Appointment Details</span>
+              <h2 class="h3 fw-bold mb-1">{{ appointment.full_name }}</h2>
+              <p class="text-muted mb-0">{{ appointment.appointment_number }}</p>
+            </div>
+            <span class="badge {% if appointment.status == 'approved' %}text-bg-success{% elif appointment.status == 'rejected' %}text-bg-danger{% else %}text-bg-warning{% endif %} px-3 py-2 text-uppercase">{{ appointment.get_status_display }}</span>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-md-6"><strong>Appointment ID:</strong><br>{{ appointment.appointment_number }}</div>
+            <div class="col-md-6"><strong>Name:</strong><br>{{ appointment.full_name }}</div>
+            <div class="col-md-6"><strong>Country:</strong><br>{{ appointment.country }}</div>
+            <div class="col-md-6"><strong>Visa Type:</strong><br>{{ appointment.get_visa_type_display }}</div>
+            <div class="col-md-6"><strong>Date:</strong><br>{% if appointment.preferred_date %}{{ appointment.preferred_date|date:"M d, Y" }}{% else %}Not selected{% endif %}</div>
+            <div class="col-md-6"><strong>Time:</strong><br>{% if appointment.preferred_time %}{{ appointment.preferred_time|time:"h:i A" }}{% else %}Not selected{% endif %}</div>
+            <div class="col-md-6"><strong>Status:</strong><br>{{ appointment.get_status_display }}</div>
+            <div class="col-md-6"><strong>City:</strong><br>{{ appointment.city }}</div>
+          </div>
+
+          <div class="mt-4 pt-3 border-top">
+            {% if appointment.status == 'approved' and appointment.appointment_letter %}
+              <a href="{% url 'download_appointment_letter' appointment.appointment_number %}" class="btn btn-apply-now">Download Appointment Letter</a>
+            {% elif appointment.status == 'approved' %}
+              <a href="{% url 'download_appointment_letter' appointment.appointment_number %}" class="btn btn-apply-now">Download Appointment Letter</a>
+            {% else %}
+              <button class="btn btn-outline-secondary" type="button" disabled>Download Appointment Letter</button>
+            {% endif %}
+          </div>
+        </div>
+        {% else %}
+        <div class="premium-card p-4 h-100 d-flex align-items-center justify-content-center text-center">
+          <div>
+            <h2 class="h4 fw-bold mb-2">No appointment loaded yet</h2>
+            <p class="text-muted mb-0">Enter your appointment number above to view the current status.</p>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

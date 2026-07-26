@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Services | Kaleem Overseas Consultants Pvt. Ltd.{% endblock %}
+
+{% block body_class %}services-page{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/services.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="services-hero">
+  <div class="services-hero-overlay"></div>
+  <div class="services-hero-bg"></div>
+  <div class="services-hero-float services-hero-float-1"></div>
+  <div class="services-hero-float services-hero-float-2"></div>
+  <div class="container position-relative">
+    <div class="row align-items-center min-vh-100 py-5 gy-5">
+      <div class="col-lg-7">
+        <div class="hero-badge services-reveal">Premium Visa & Travel Solutions</div>
+        <h1 class="services-hero-title services-reveal" style="transition-delay: 0.08s;">Professional Visa &amp; Travel Services</h1>
+        <p class="services-hero-subtitle services-reveal" style="transition-delay: 0.16s;">Reliable Visit Visa Consultancy &amp; International Travel Solutions</p>
+        <p class="services-hero-copy services-reveal" style="transition-delay: 0.24s;">Kaleem Overseas Consultants Pvt. Ltd. delivers tailored visit visa, business visa, and travel support for clients who expect a premium, professional experience.</p>
+        <div class="d-flex flex-wrap gap-3 services-reveal" style="transition-delay: 0.32s;">
+          <a href="{% url 'book_appointment' %}" class="btn btn-hero-primary">Book Appointment</a>
+          <a href="#services-grid" class="btn btn-hero-secondary">Explore Services</a>
+        </div>
+        <div class="hero-pills services-reveal" style="transition-delay: 0.4s;">
+          <span><i class="fa-solid fa-passport"></i> Visa Experts</span>
+          <span><i class="fa-solid fa-plane-departure"></i> Travel Planning</span>
+          <span><i class="fa-solid fa-shield-heart"></i> Trusted Guidance</span>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="hero-glass-card services-reveal" style="transition-delay: 0.18s;">
+          <div class="hero-glass-header">
+            <div class="hero-glass-icon"><i class="fa-solid fa-plane-up"></i></div>
+            <div>
+              <p class="mb-1 text-uppercase small text-gold fw-semibold">International Travel</p>
+              <h2 class="h4 mb-0 text-white">Premium support for every journey</h2>
+            </div>
+          </div>
+          <div class="hero-glass-grid">
+            <div class="glass-stat">
+              <span class="glass-stat-value">9+</span>
+              <span class="glass-stat-label">Core services</span>
+            </div>
+            <div class="glass-stat">
+              <span class="glass-stat-value">24/7</span>
+              <span class="glass-stat-label">Client support</span>
+            </div>
+            <div class="glass-stat">
+              <span class="glass-stat-value">5</span>
+              <span class="glass-stat-label">Popular destinations</span>
+            </div>
+            <div class="glass-stat">
+              <span class="glass-stat-value">100%</span>
+              <span class="glass-stat-label">Focused assistance</span>
+            </div>
+          </div>
+          <div class="hero-mini-card">
+            <i class="fa-solid fa-star text-gold"></i>
+            <div>
+              <h3 class="mb-1">Luxury-grade service experience</h3>
+              <p class="mb-0">Elegant guidance for visit visas, tours, bookings, and documentation.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="services-section section-pad" id="services-grid">
+  <div class="container">
+    <div class="section-heading text-center mb-5 services-reveal">
+      <span class="section-kicker-dark">Our Services</span>
+      <h2 class="section-title-dark">Everything you need for a smooth visa and travel experience</h2>
+      <p class="section-lead-dark mb-0">A modern, premium support system designed for clarity, confidence, and fast execution.</p>
+    </div>
+    <div class="row g-4">
+      {% for service in services_list %}
+        <div class="col-md-6 col-lg-4">
+          <article class="service-card services-reveal">
+            <div class="service-icon-wrap">
+              {% if service.icon %}
+                <i class="{{ service.icon }}"></i>
+              {% else %}
+                <i class="fa-solid fa-star"></i>
+              {% endif %}
+            </div>
+            <h3>{{ service.name }}</h3>
+            <p>{{ service.description }}</p>
+          </article>
+        </div>
+      {% empty %}
+        <div class="col-12"><div class="alert alert-info border-0 shadow-sm">Add services in the admin panel to display them here.</div></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="why-choose-premium section-pad">
+  <div class="container">
+    <div class="section-heading text-center mb-5 services-reveal">
+      <span class="section-kicker-dark">Why Choose Us</span>
+      <h2 class="section-title-dark">A professional standard built around trust and precision</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-4"><div class="feature-card-premium services-reveal"><i class="fa-solid fa-circle-check"></i><h3>Professional Visa Guidance</h3><p>Clear and strategic advice for better application preparation.</p></div></div>
+      <div class="col-md-6 col-lg-4"><div class="feature-card-premium services-reveal"><i class="fa-solid fa-route"></i><h3>Reliable Tour Management</h3><p>Well-planned travel itineraries tailored to your schedule and comfort.</p></div></div>
+      <div class="col-md-6 col-lg-4"><div class="feature-card-premium services-reveal"><i class="fa-solid fa-handshake-simple"></i><h3>Honest Consultancy Services</h3><p>Transparent communication and realistic guidance at every step.</p></div></div>
+      <div class="col-md-6 col-lg-4"><div class="feature-card-premium services-reveal"><i class="fa-solid fa-tags"></i><h3>Affordable Packages</h3><p>Competitive pricing without compromising on quality or support.</p></div></div>
+      <div class="col-md-6 col-lg-4"><div class="feature-card-premium services-reveal"><i class="fa-solid fa-folder-tree"></i><h3>Smooth Documentation</h3><p>Organized file preparation with careful document review.</p></div></div>
+      <div class="col-md-6 col-lg-4"><div class="feature-card-premium services-reveal"><i class="fa-solid fa-user-group"></i><h3>Customer-Focused Support</h3><p>Fast response and dedicated assistance from start to finish.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="director-section section-pad">
+  <div class="container">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-5 services-reveal">
+        <div class="director-card">
+          <span class="section-kicker-dark mb-3 d-inline-flex">Director Message</span>
+          <h2 class="section-title-dark mb-3">Director Message</h2>
+          <p class="director-quote mb-4">“At Kaleem Overseas Consultants Pvt. Ltd., our goal is to provide professional visa consultancy and quality travel services with honesty and dedication. We strive to make every client’s travel experience smooth, safe, and memorable.”</p>
+          <div class="director-signature">— Kaleem Ahmed<br><span>Owner &amp; Director</span></div>
+        </div>
+      </div>
+      <div class="col-lg-7 services-reveal" style="transition-delay: 0.12s;">
+        <div class="director-visual">
+          <div class="director-metrics">
+            <div><strong>Trusted</strong><span>consultancy partner</span></div>
+            <div><strong>Modern</strong><span>travel solutions</span></div>
+            <div><strong>Personal</strong><span>client support</span></div>
+          </div>
+          <div class="director-note">
+            <i class="fa-solid fa-award text-gold"></i>
+            <p class="mb-0">Built for clients who value professionalism, speed, and a premium service experience.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="countries-section section-pad">
+  <div class="container">
+    <div class="section-heading text-center mb-5 services-reveal">
+      <span class="section-kicker-dark">Visa Categories</span>
+      <h2 class="section-title-dark">Start with the right visa guidance</h2>
+    </div>
+    <div class="row g-4 justify-content-center">
+      <div class="col-md-6 col-lg-4"><div class="country-card-premium services-reveal"><div class="country-flag">🌍</div><h3>Visit Visa</h3><p>Tourism, family visits, and short-stay travel guidance.</p><a class="text-link" href="{% url 'visit_visa' %}">View countries</a></div></div>
+      <div class="col-md-6 col-lg-4"><div class="country-card-premium services-reveal"><div class="country-flag">💼</div><h3>Business Visa</h3><p>Meetings, trade visits, and professional trip support.</p><a class="text-link" href="{% url 'business_visa' %}">View countries</a></div></div>
+      <div class="col-md-6 col-lg-4"><div class="country-card-premium services-reveal"><div class="country-flag">📅</div><h3>Book Appointment</h3><p>Speak with our team and get guidance on the next step.</p><a class="text-link" href="{% url 'book_appointment' %}">Book now</a></div></div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/services.js' %}"></script>
+{% endblock %}

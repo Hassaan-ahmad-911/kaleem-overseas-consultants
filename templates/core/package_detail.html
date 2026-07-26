@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Package Story | Kaleem Overseas Consultants Pvt. Ltd.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="{% static 'css/packages.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="package-detail-hero section-pad">
+  <div class="container">
+    <div class="package-detail-top" data-aos="fade-up">
+      <a href="{% url 'packages' %}" class="package-back-link"><i class="fa-solid fa-arrow-left me-2"></i>Back to packages</a>
+      <span class="packages-kicker">Open Story</span>
+    </div>
+
+    <div class="row g-4 align-items-start mt-2">
+      <div class="col-lg-7" data-aos="fade-up">
+        <div class="package-detail-media">
+          <img src="{{ package.image.url }}" alt="Tour package image" class="package-detail-image" loading="lazy">
+        </div>
+      </div>
+      <div class="col-lg-5" data-aos="fade-left">
+        <div class="package-detail-panel">
+          <span class="package-card__label mb-3">Premium Travel Package</span>
+          <h1>Complete Package Preview</h1>
+          <p class="package-detail-description">{{ package.description }}</p>
+          <div class="package-detail-meta">
+            <span><i class="fa-regular fa-clock me-2"></i>{{ package.created_at|date:"M d, Y" }}</span>
+          </div>
+          <p class="package-detail-note">This page shows the full package image and description without the card crop, so visitors can review the complete offer before taking action.</p>
+        </div>
+      </div>
+    </div>
+
+    {% if related_packages %}
+      <div class="section-heading text-center mt-5 mb-4" data-aos="fade-up">
+        <span class="packages-kicker">More Packages</span>
+        <h2 class="packages-section-title">Other travel stories</h2>
+      </div>
+      <div class="row g-4">
+        {% for item in related_packages %}
+          <div class="col-md-6 col-xl-4" data-aos="fade-up">
+            <a href="{% url 'package_detail' item.pk %}" class="package-related-card">
+              <img src="{{ item.image.url }}" alt="Tour package image" loading="lazy">
+              <div>
+                <strong>Open Story</strong>
+                <span>{{ item.created_at|date:"M d, Y" }}</span>
+              </div>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    if (typeof AOS !== 'undefined') {
+      AOS.init({ duration: 700, once: true, offset: 50, easing: 'ease-out-cubic' });
+    }
+  </script>
+{% endblock %}

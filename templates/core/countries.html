@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Countries | Kaleem Overseas Consultant{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <h1 class="fw-bold text-white">Countries We Support</h1>
+    <p class="text-white-50 mb-0">View destination details, descriptions, and visa requirements.</p>
+  </div>
+</section>
+<section class="section-pad">
+  <div class="container">
+    <div class="row g-4">
+      {% for country in countries %}
+        <div class="col-md-6 col-lg-4">
+          <div class="card country-card h-100 border-0 shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">{{ country.name }}</h5>
+              <p class="card-text text-muted">{{ country.description }}</p>
+              <h6 class="text-gold fw-semibold">Requirements</h6>
+              <p class="small text-muted mb-0">{{ country.requirements }}</p>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <div class="col-12"><div class="alert alert-info">No countries added yet. Use the admin panel to populate destination data.</div></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

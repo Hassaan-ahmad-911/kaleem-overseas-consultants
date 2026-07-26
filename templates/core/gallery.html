@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Success Gallery | Kaleem Overseas Consultants Pvt. Ltd.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="{% static 'css/gallery.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="gallery-hero">
+  <div class="gallery-hero__overlay"></div>
+  <div class="container position-relative">
+    <div class="row align-items-center gy-4">
+      <div class="col-lg-7" data-aos="fade-up">
+        <span class="gallery-kicker">Success Gallery</span>
+        <h1 class="gallery-title">Celebrating Our Clients' Successful Visa Approvals &amp; Travel Journeys</h1>
+        <p class="gallery-lead">Showcase your approved client stories directly from the Django Admin Panel with elegant, responsive presentation built for trust and credibility.</p>
+        <div class="gallery-hero-actions">
+          <a href="{% url 'book_appointment' %}" class="btn gallery-btn-primary">Book Appointment</a>
+          <a href="#gallery-grid" class="btn gallery-btn-secondary">Browse Success Stories</a>
+        </div>
+      </div>
+      <div class="col-lg-5" data-aos="fade-left">
+        <div class="gallery-hero-card">
+          <div class="gallery-hero-card__stat">
+            <span>{{ total_success_stories }}</span>
+            <p>Total success stories</p>
+          </div>
+          <div class="gallery-hero-card__stat accent">
+            <span>{{ featured_count }}</span>
+            <p>Featured approvals</p>
+          </div>
+          <div class="gallery-hero-card__note">
+            <i class="fa-solid fa-image"></i>
+            <div>
+              <strong>Admin-managed uploads</strong>
+              <p class="mb-0">Upload client photos, captions, visa types, and featured stories without touching code.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if featured_gallery %}
+<section class="section-pad gallery-featured-section">
+  <div class="container">
+    <div class="section-heading text-center mb-4" data-aos="fade-up">
+      <span class="gallery-section-label">Featured Success Stories</span>
+      <h2 class="gallery-section-title">Highlighted client approvals</h2>
+    </div>
+    <div id="featuredSuccessCarousel" class="carousel slide gallery-carousel" data-bs-ride="carousel" data-aos="fade-up">
+      <div class="carousel-inner rounded-5 overflow-hidden shadow-lg">
+        {% for item in featured_gallery %}
+          <div class="carousel-item{% if forloop.first %} active{% endif %}">
+            <div class="gallery-carousel__item">
+              <img src="{{ item.image.url }}" class="gallery-carousel__image" alt="{{ item.client_name }} approval image" loading="lazy">
+              <div class="gallery-carousel__overlay"></div>
+              <div class="gallery-carousel__content">
+                <span class="gallery-badge">Visa Approved</span>
+                <h3>{{ item.client_name }}</h3>
+                <p>{{ item.country }} · {{ item.get_visa_type_display }}</p>
+                <p class="mb-0">{{ item.caption }}</p>
+                <a href="{% url 'gallery_detail' item.pk %}" class="gallery-link">View details <i class="fa-solid fa-arrow-right-long ms-1"></i></a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      {% if featured_gallery|length > 1 %}
+      <button class="carousel-control-prev" type="button" data-bs-target="#featuredSuccessCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#featuredSuccessCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="section-pad gallery-filter-section" id="gallery-grid">
+  <div class="container">
+    <div class="section-heading text-center mb-4" data-aos="fade-up">
+      <span class="gallery-section-label">Filter by Visa Type</span>
+      <h2 class="gallery-section-title">Browse every approval story</h2>
+      <p class="gallery-section-subtitle">Use the quick filters below to focus on the visa type you want to explore.</p>
+    </div>
+
+    <div class="gallery-filters" data-aos="fade-up">
+      <a class="gallery-filter-btn{% if active_filter == 'all' %} active{% endif %}" href="{% url 'gallery' %}">All</a>
+      {% for visa_value, visa_label in visa_choices %}
+        <a class="gallery-filter-btn{% if active_filter == visa_value %} active{% endif %}" href="{% url 'gallery' %}?visa_type={{ visa_value }}">{{ visa_label }}</a>
+      {% endfor %}
+    </div>
+
+    <div class="row g-4 gallery-masonry mt-1">
+      {% for item in gallery_items %}
+        <div class="col-sm-6 col-xl-4" data-aos="fade-up" data-aos-delay="{% widthratio forloop.counter 1 60 %}">
+          <article class="gallery-card h-100">
+            <div class="gallery-card__media">
+              <button type="button"
+                      class="gallery-card__open"
+                      data-bs-toggle="modal"
+                      data-bs-target="#galleryLightbox"
+                      data-image="{{ item.image.url }}"
+                      data-title="{{ item.client_name|escape }}"
+                      data-country="{{ item.country|escape }}"
+                      data-visa="{{ item.get_visa_type_display|escape }}"
+                      data-caption="{{ item.caption|escape }}">
+                <img src="{{ item.image.url }}" alt="{{ item.client_name }} in {{ item.country }}" loading="lazy">
+                <span class="gallery-card__overlay"></span>
+                <span class="gallery-card__zoom"><i class="fa-solid fa-expand"></i></span>
+              </button>
+              {% if item.is_featured %}
+                <span class="gallery-badge gallery-badge--featured">Featured</span>
+              {% endif %}
+              <span class="gallery-badge gallery-badge--approved">Visa Approved</span>
+            </div>
+            <div class="gallery-card__body">
+              <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+                <span class="gallery-country"><i class="fa-solid fa-location-dot me-2"></i>{{ item.country }}</span>
+                <span class="gallery-visa-pill">{{ item.get_visa_type_display }}</span>
+              </div>
+              <h3>{{ item.client_name }}</h3>
+              <p>{{ item.caption }}</p>
+              <div class="gallery-card__footer">
+                <a href="{% url 'gallery_detail' item.pk %}">Open story</a>
+                <span>{{ item.created_at|date:"M d, Y" }}</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      {% empty %}
+        <div class="col-12">
+          <div class="gallery-empty" data-aos="fade-up">
+            <i class="fa-solid fa-images"></i>
+            <h3>No success stories yet</h3>
+            <p>Add your first gallery entry from the Django Admin Panel to start showcasing approvals.</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<div class="modal fade gallery-modal" id="galleryLightbox" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content gallery-modal__content">
+      <button type="button" class="btn-close gallery-modal__close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="row g-0">
+        <div class="col-lg-7">
+          <img src="" alt="" class="gallery-modal__image" data-gallery-modal-image>
+        </div>
+        <div class="col-lg-5">
+          <div class="gallery-modal__body">
+            <span class="gallery-badge">Visa Approved</span>
+            <h3 data-gallery-modal-title></h3>
+            <p class="gallery-modal__meta" data-gallery-modal-country></p>
+            <span class="gallery-visa-pill mb-3 d-inline-flex" data-gallery-modal-visa></span>
+            <p class="gallery-modal__caption" data-gallery-modal-caption></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="{% static 'js/gallery.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% load static %}
+{% with url_name=request.resolver_match.url_name %}
+{% if url_name != 'services' %}
+<div class="site-topbar">
+  <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+    <div class="topbar-contact d-flex flex-wrap align-items-center gap-3">
+      <span><i class="fa-solid fa-phone me-2"></i>+92 308 6898079</span>
+      <span><i class="fa-solid fa-envelope me-2"></i>kaleemoverseasconsultants@gmail.com</span>
+      <span><i class="fa-solid fa-location-dot me-2"></i>Shadman Town, Mandi Bahauddin | Bahria Town (RWP)</span>
+    </div>
+    <div class="topbar-social d-flex align-items-center gap-3">
+      <a href="https://www.instagram.com/kaleemoverseasconsultants?igsh=b3V5cHg0Z2VkeDF5" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+      <a href="https://www.tiktok.com/@kaleemahmad984?_r=1&_t=ZS-97ZIcIKYRLZ" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+      <a href="https://youtube.com/@kaleemoverseasconsultant?si=p-AouvFgj16iy3ah" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+      <a href="https://wa.me/923086898079?text=Hello%20I%20want%20to%20book%20a%20visa%20consultation" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+    </div>
+  </div>
+</div>
+{% endif %}
+<nav class="navbar navbar-expand-lg navbar-light site-navbar sticky-top{% if url_name == 'services' %} site-navbar--transparent{% endif %}{% if url_name != 'services' %} site-navbar--with-topbar{% endif %}">
+  <div class="container">
+    <a class="navbar-brand site-brand logo" href="{% url 'home' %}">
+      <img src="{{ MEDIA_URL }}logo.png" alt="Kaleem Overseas Consultants Logo" class="site-logo">
+    </a>
+    <button class="navbar-toggler site-navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav mx-auto mb-3 mb-lg-0 align-items-lg-center nav-center-links">
+        <li class="nav-item">
+          <a class="nav-link{% if url_name == 'home' %} active{% endif %}" href="{% url 'home' %}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link{% if url_name == 'about' %} active{% endif %}" href="{% url 'about' %}">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link{% if url_name == 'services' %} active{% endif %}" href="{% url 'services' %}">Services</a>
+        </li>
+        <li class="nav-item dropdown visa-mega-dropdown">
+          <a class="nav-link dropdown-toggle{% if url_name == 'visit_visa' or url_name == 'business_visa' or url_name == 'visa_guidance' %} active{% endif %}" href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+            Visa
+          </a>
+          <div class="dropdown-menu visa-mega-menu border-0 p-0">
+            <div class="visa-mega-menu__inner">
+              <div class="row g-3 g-lg-4 visa-mega-menu__grid">
+                <div class="col-12 col-md-6 col-lg-4 d-flex">
+                  <article class="visa-mega-card">
+                    <div class="visa-mega-card__icon visit"><i class="fa-solid fa-earth-americas"></i></div>
+                    <h3>Visit Visa</h3>
+                    <p>Professional visit visa consultancy for multiple countries.</p>
+                    <a href="{% url 'visit_visa' %}" class="visa-mega-card__btn">Explore Visit Visas</a>
+                  </article>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 d-flex">
+                  <article class="visa-mega-card">
+                    <div class="visa-mega-card__icon business"><i class="fa-solid fa-briefcase"></i></div>
+                    <h3>Business Visa</h3>
+                    <p>Business visa consultancy for China, Germany and Netherlands.</p>
+                    <a href="{% url 'business_visa' %}" class="visa-mega-card__btn">Explore Business Visas</a>
+                  </article>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 d-flex">
+                  <article class="visa-mega-card">
+                    <div class="visa-mega-card__icon guidance"><i class="fa-solid fa-book-open"></i></div>
+                    <h3>Visa Guidance</h3>
+                    <p>Visa process, documentation requirements, interview tips and FAQs.</p>
+                    <a href="{% url 'visa_guidance' %}" class="visa-mega-card__btn">Read Guidance</a>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link{% if url_name == 'packages' or url_name == 'package_detail' %} active{% endif %}" href="{% url 'packages' %}">Tour Packages</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link nav-link-stories{% if url_name == 'stories' %} active{% endif %}" href="{% url 'stories' %}">
+            <i class="fa-regular fa-circle-play nav-link-icon" aria-hidden="true"></i> Stories
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link{% if url_name == 'contact' %} active{% endif %}" href="{% url 'contact' %}">Contact</a>
+        </li>
+      </ul>
+      <div class="navbar-cta-wrap d-flex align-items-center justify-content-lg-end">
+        <a class="btn btn-apply-now btn-nav-cta" href="{% url 'book_appointment' %}">Book Appointment</a>
+      </div>
+    </div>
+  </div>
+</nav>
+{% endwith %}
