@@ -50,9 +50,13 @@ WSGI_APPLICATION = "kaleem_overseas.wsgi.application"
 ASGI_APPLICATION = "kaleem_overseas.asgi.application"
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'kaleem_overseas_db',
+        'USER': 'postgres',
+        'PASSWORD': 'Loveforall',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
