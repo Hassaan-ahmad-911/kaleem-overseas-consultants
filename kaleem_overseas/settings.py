@@ -2,9 +2,10 @@ from pathlib import Path
 from decouple import config
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = "django-insecure-kaleem-overseas-consultant-secret-key"
-DEBUG = True
-ALLOWED_HOSTS = []
+SECRET_KEY = config("SECRET_KEY")
+DEBUG = config("DEBUG", default=False, cast=bool)
+ALLOWED_HOSTS = [
+]
 
 INSTALLED_APPS = [
     "django.contrib.admin",

@@ -20,7 +20,9 @@
 <nav class="navbar navbar-expand-lg navbar-light site-navbar sticky-top{% if url_name == 'services' %} site-navbar--transparent{% endif %}{% if url_name != 'services' %} site-navbar--with-topbar{% endif %}">
   <div class="container">
     <a class="navbar-brand site-brand logo" href="{% url 'home' %}">
-      <img src="{{ MEDIA_URL }}logo.png" alt="Kaleem Overseas Consultants Logo" class="site-logo">
+      <img src="{% static 'images/logo.png' %}"
+     alt="Kaleem Overseas Consultants Logo"
+     class="site-logo">
     </a>
     <button class="navbar-toggler site-navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
