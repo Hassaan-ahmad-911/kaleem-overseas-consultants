@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% block title %}Appointment Status | Kaleem Overseas Consultants Pvt. Ltd.{% endblock %}
 {% block content %}
-<section class="page-hero">
-  <div class="container">
-    <h1 class="fw-bold text-white">Appointment Status</h1>
+<section class="page-hero page-hero--status">
+  <div class="container reveal">
+    <span class="page-hero__kicker"><i class="fa-solid fa-receipt"></i> Track your booking</span>
+    <h1 class="text-white">Appointment Status</h1>
     <p class="text-white-50 mb-0">Check your appointment details and approval status.</p>
   </div>
 </section>
@@ -11,10 +12,11 @@
 <section class="section-pad">
   <div class="container">
     <div class="row g-4 justify-content-center">
-      <div class="col-lg-5">
+      <div class="col-lg-5 reveal reveal-left">
         <div class="form-panel h-100">
           <h2 class="h4 fw-bold mb-3">Look up your appointment</h2>
-          <form method="get" class="row g-3">
+          <form method="post" action="{% url 'appointment_status' %}" class="row g-3">
+            {% csrf_token %}
             <div class="col-12">{{ lookup_form.appointment_number.label_tag }}{{ lookup_form.appointment_number }}</div>
             <div class="col-12">{{ lookup_form.appointment_number.errors }}</div>
             <div class="col-12">{{ lookup_form.phone_number.label_tag }}{{ lookup_form.phone_number }}</div>
@@ -23,11 +25,11 @@
               <button class="btn btn-gold px-4" type="submit">View Status</button>
             </div>
           </form>
-          <p class="text-muted small mt-3 mb-0">You can check the appointment with just the appointment number. Phone number helps confirm the record.</p>
+          <p class="text-muted small mt-3 mb-0">For your privacy, enter both your appointment number and the phone number you used when booking.</p>
         </div>
       </div>
 
-      <div class="col-lg-7">
+      <div class="col-lg-7 reveal reveal-right">
         {% if appointment %}
         <div class="premium-card p-4 h-100">
           <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
@@ -64,7 +66,7 @@
         <div class="premium-card p-4 h-100 d-flex align-items-center justify-content-center text-center">
           <div>
             <h2 class="h4 fw-bold mb-2">No appointment loaded yet</h2>
-            <p class="text-muted mb-0">Enter your appointment number above to view the current status.</p>
+            <p class="text-muted mb-0">Enter your appointment number and phone number to view the current status.</p>
           </div>
         </div>
         {% endif %}

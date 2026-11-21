@@ -1,0 +1,61 @@
+{% load static %}
+{# Opening "flight" animation. Shown once per browser session; see the head script in base.html and static/js/intro.js. #}
+<div class="site-intro" id="siteIntro">
+  <span class="site-intro__cloud site-intro__cloud--one"></span>
+  <span class="site-intro__cloud site-intro__cloud--two"></span>
+  <span class="site-intro__cloud site-intro__cloud--three"></span>
+
+  <svg class="site-intro__defs" width="0" height="0" aria-hidden="true" focusable="false">
+    <defs>
+      <!-- Jet seen from above, nose pointing right (+x) so rotate="auto" follows the path. -->
+      <g id="introPlaneShape">
+        <path fill="#dfe8f5" d="M 6 -4 L -14 -38 L -5 -38 L 22 -4 Z M 6 4 L -14 38 L -5 38 L 22 4 Z"/>
+        <rect fill="#c3d0e3" x="-1" y="-24" width="11" height="4.5" rx="2.2"/>
+        <rect fill="#c3d0e3" x="-1" y="19.5" width="11" height="4.5" rx="2.2"/>
+        <path fill="#e63946" d="M -30 -3 L -41 -17 L -34 -17 L -21 -3 Z M -30 3 L -41 17 L -34 17 L -21 3 Z"/>
+        <path fill="#ffffff" d="M -38 -4.5 L 28 -4.5 C 36 -4.5 42 -2 44 0 C 42 2 36 4.5 28 4.5 L -38 4.5 C -41 4.5 -42 2 -42 0 C -42 -2 -41 -4.5 -38 -4.5 Z"/>
+        <path fill="#0d3b66" d="M 33 -2.6 C 37 -2.2 40 -1.2 41.5 0 C 40 1.2 37 2.2 33 2.6 Z"/>
+        <rect fill="#f4b400" x="-36" y="-1.2" width="56" height="2.4" rx="1.2"/>
+      </g>
+    </defs>
+  </svg>
+
+  <svg class="site-intro__flight site-intro__flight--landscape" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+    <defs>
+      <path id="introPathLandscape" d="M -120 820 C 300 800 620 760 900 700 C 1180 640 1340 470 1240 300 C 1140 130 860 150 700 230 C 540 310 380 250 420 130 C 460 10 900 -60 1720 -40"/>
+      <mask id="introTrailMaskLandscape" maskUnits="userSpaceOnUse" x="-200" y="-200" width="2000" height="1300">
+        <path class="site-intro__trail-reveal" pathLength="1" d="M -120 820 C 300 800 620 760 900 700 C 1180 640 1340 470 1240 300 C 1140 130 860 150 700 230 C 540 310 380 250 420 130 C 460 10 900 -60 1720 -40"/>
+      </mask>
+    </defs>
+    <path class="site-intro__trail" mask="url(#introTrailMaskLandscape)" d="M -120 820 C 300 800 620 760 900 700 C 1180 640 1340 470 1240 300 C 1140 130 860 150 700 230 C 540 310 380 250 420 130 C 460 10 900 -60 1720 -40"/>
+    <g class="site-intro__plane">
+      <use href="#introPlaneShape" transform="scale(1.35)"/>
+    </g>
+  </svg>
+
+  <svg class="site-intro__flight site-intro__flight--portrait" viewBox="0 0 900 1600" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+    <defs>
+      <path id="introPathPortrait" d="M -120 1400 C 250 1330 620 1250 720 1020 C 820 790 700 560 470 520 C 240 480 120 360 260 230 C 400 100 700 120 1040 -120"/>
+      <mask id="introTrailMaskPortrait" maskUnits="userSpaceOnUse" x="-200" y="-200" width="1300" height="2000">
+        <path class="site-intro__trail-reveal" pathLength="1" d="M -120 1400 C 250 1330 620 1250 720 1020 C 820 790 700 560 470 520 C 240 480 120 360 260 230 C 400 100 700 120 1040 -120"/>
+      </mask>
+    </defs>
+    <path class="site-intro__trail" mask="url(#introTrailMaskPortrait)" d="M -120 1400 C 250 1330 620 1250 720 1020 C 820 790 700 560 470 520 C 240 480 120 360 260 230 C 400 100 700 120 1040 -120"/>
+    <g class="site-intro__plane">
+      <use href="#introPlaneShape" transform="scale(1.9)"/>
+    </g>
+  </svg>
+
+  <div class="site-intro__brand">
+    <span class="site-intro__logo">
+      <picture>
+        <source srcset="{% static 'images/logo-trim.webp' %}" type="image/webp">
+        <img src="{% static 'images/logo-trim.png' %}" alt="" width="800" height="175">
+      </picture>
+    </span>
+    <p class="site-intro__tagline">Your Dream, Our Guidance</p>
+    <span class="site-intro__progress" aria-hidden="true"><span></span></span>
+  </div>
+
+  <button type="button" class="site-intro__skip">Skip intro <i class="fa-solid fa-forward ms-1" aria-hidden="true"></i></button>
+</div>

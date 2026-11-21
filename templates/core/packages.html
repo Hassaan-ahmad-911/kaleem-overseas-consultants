@@ -16,7 +16,7 @@
       <div class="col-lg-7" data-aos="fade-up">
         <span class="packages-kicker">Tour Packages</span>
         <h1 class="packages-title">Explore Our International Travel Packages</h1>
-        <p class="packages-lead">Browse premium travel package cards uploaded directly from the Django Admin Panel and present them in a clean, modern layout.</p>
+        <p class="packages-lead">Browse our international tour packages for families, couples, groups, and individual travellers.</p>
       </div>
       <div class="col-lg-5" data-aos="fade-left">
         <div class="packages-hero-card">
@@ -27,8 +27,8 @@
           <div class="packages-hero-note">
             <i class="fa-solid fa-suitcase-rolling"></i>
             <div>
-              <strong>Simple admin workflow</strong>
-              <p class="mb-0">Upload package image and description only, then publish instantly.</p>
+              <strong>Tailored to you</strong>
+              <p class="mb-0">Every package can be customised to your dates, budget, and travel style.</p>
             </div>
           </div>
         </div>
@@ -61,7 +61,7 @@
           <div class="packages-empty">
             <i class="fa-solid fa-image"></i>
             <h3>No tour packages yet</h3>
-            <p>Add your first package image and description from the admin panel to start showcasing travel offers.</p>
+            <p>New tour packages are coming soon. Contact us for a custom travel plan in the meantime.</p>
           </div>
         </div>
       {% endfor %}
@@ -74,7 +74,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script>
     if (typeof AOS !== 'undefined') {
-      AOS.init({ duration: 700, once: true, offset: 50, easing: 'ease-out-cubic' });
+      AOS.init({ duration: 700, once: true, offset: 50, easing: 'ease-out-cubic', disable: window.matchMedia('(prefers-reduced-motion: reduce)').matches });
     }
   </script>
 {% endblock %}

@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
       once: true,
       offset: 50,
       easing: 'ease-out-cubic',
+      disable: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
     });
   }
 

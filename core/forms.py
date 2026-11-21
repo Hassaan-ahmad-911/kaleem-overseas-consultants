@@ -40,8 +40,7 @@ class AppointmentStatusLookupForm(forms.Form):
     )
     phone_number = forms.CharField(
         label="Phone Number",
-        required=False,
-        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Enter your phone number (optional)"}),
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Phone number used when booking", "inputmode": "tel", "autocomplete": "tel"}),
     )
 
     def clean_appointment_number(self):

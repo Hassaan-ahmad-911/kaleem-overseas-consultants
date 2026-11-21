@@ -1,0 +1,20 @@
+{% load country_flags %}
+<div class="col-md-6 col-lg-4 reveal">
+  <article class="country-card h-100 d-flex flex-column">
+    <div class="country-card__head">
+      {% with code=country.name|flag_code %}
+        {% if code %}<span class="fi fi-{{ code }} country-flag-img" role="img" aria-label="Flag of {{ country.name }}"></span>{% else %}<span class="country-flag-fallback" aria-hidden="true"><i class="fa-solid fa-earth-americas"></i></span>{% endif %}
+      {% endwith %}
+      <div>
+        <h2>{{ country.name }}</h2>
+        <span class="country-card__tag{% if country.visa_category == 'business' %} country-card__tag--business{% endif %}">{{ country.get_visa_category_display }}</span>
+      </div>
+    </div>
+    <p>{{ country.description }}</p>
+    <div class="country-card__requirements">
+      <h3>Requirements</h3>
+      <p>{{ country.requirements }}</p>
+    </div>
+    <a class="text-link mt-auto pt-3" href="{% url 'book_appointment' %}">Book a consultation <i class="fa-solid fa-arrow-right-long ms-1"></i></a>
+  </article>
+</div>

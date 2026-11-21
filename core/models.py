@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import IntegrityError, models, transaction
 from django.utils import timezone
 
 from .utils import generate_appointment_letter_pdf, generate_appointment_number
@@ -104,13 +104,13 @@ class Appointment(models.Model):
         is_new = self.pk is None
         previous_status = None
 
-        if not self.appointment_number:
-            self.appointment_number = generate_appointment_number()
-
         if not is_new:
             previous_status = Appointment.objects.filter(pk=self.pk).values_list("status", flat=True).first()
 
-        super().save(*args, **kwargs)
+        if self.appointment_number:
+            super().save(*args, **kwargs)
+        else:
+            self._save_with_new_number(*args, **kwargs)
 
         should_generate_letter = self.status == self.STATUS_APPROVED and (
             is_new or previous_status != self.STATUS_APPROVED or not self.appointment_letter
@@ -122,6 +122,21 @@ class Appointment(models.Model):
             if self.approved_at is None:
                 self.approved_at = timezone.now()
             super().save(update_fields=["appointment_letter", "approved_at", "updated_at"])
+
+    def _save_with_new_number(self, *args, **kwargs):
+        # Two bookings submitted at the same moment can compute the same next number;
+        # the unique constraint rejects the second, so retry with a fresh number.
+        attempts = 5
+        for attempt in range(attempts):
+            self.appointment_number = generate_appointment_number()
+            try:
+                with transaction.atomic():
+                    super().save(*args, **kwargs)
+                return
+            except IntegrityError:
+                self.appointment_number = None
+                if attempt == attempts - 1:
+                    raise
 
 
 class ContactMessage(models.Model):

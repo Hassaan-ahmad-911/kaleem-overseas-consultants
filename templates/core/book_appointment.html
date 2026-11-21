@@ -5,7 +5,7 @@
 
 {% block extra_head %}
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <link rel="stylesheet" href="{% static 'css/appointment.css' %}">
+  <link rel="stylesheet" href="{% static 'css/appointment.css' %}?v=20261025-1">
 {% endblock %}
 
 {% block content %}
@@ -14,7 +14,7 @@
   <div class="container position-relative h-100">
     <div class="row align-items-center gy-3 py-2 appointment-hero__layout appointment-hero__layout--compact">
       <div class="col-12">
-        <div class="appointment-hero__content appointment-hero__content--compact text-center text-lg-start">
+        <div class="appointment-hero__content reveal appointment-hero__content--compact text-center text-lg-start">
           <span class="appointment-kicker"><i class="bi bi-globe2"></i> Premium Visa Consultancy</span>
           <h1>Book Your Appointment</h1>
           <p class="appointment-hero__lead mx-auto mx-lg-0">Schedule a consultation with our professional visa consultants and begin your journey today.</p>
@@ -35,7 +35,7 @@
 <section class="appointment-main section-pad">
   <div class="container">
     <div class="row g-4 align-items-start">
-      <div class="col-lg-4">
+      <div class="col-lg-4 reveal reveal-left">
         <div class="appointment-side-card appointment-side-card--main h-100">
           <div class="appointment-side-card__header">
             <span class="appointment-side-card__eyebrow">Why Book With Us?</span>
@@ -79,22 +79,22 @@
           <div class="appointment-support-card__block">
             <span class="appointment-support-card__icon"><i class="bi bi-telephone-fill"></i></span>
             <span>Phone Number</span>
-            <strong>+92 308 6898079</strong>
+            <strong>{{ site.phone_display }}</strong>
           </div>
           <div class="appointment-support-card__block">
             <span class="appointment-support-card__icon"><i class="bi bi-clock-fill"></i></span>
             <span>Business Hours</span>
-            <strong>Monday – Saturday</strong>
-            <small>9 AM – 6 PM</small>
+            <strong>{{ site.hours_days }}</strong>
+            <small>{{ site.hours_time }}</small>
           </div>
-          <a class="btn appointment-btn appointment-btn--support w-100" href="tel:+923086898079">
+          <a class="btn appointment-btn appointment-btn--support w-100" href="tel:{{ site.phone_tel }}">
             <i class="bi bi-telephone-fill me-2"></i>Call Now
           </a>
         </div>
       </div>
 
-      <div class="col-lg-8">
-        <div class="appointment-form-card">
+      <div class="col-lg-8 order-first order-lg-0 reveal reveal-right">
+        <div class="appointment-form-card" id="appointment-form">
           <div class="appointment-form-card__header">
             <span class="appointment-side-card__eyebrow">Appointment Details</span>
             <h2>Appointment Details</h2>
@@ -219,7 +219,7 @@
 
 <section class="appointment-status-wrap section-pad pt-0">
   <div class="container">
-    <div class="appointment-status-card">
+    <div class="appointment-status-card reveal">
       <div class="appointment-status-card__content">
         <div class="appointment-status-card__icon"><i class="bi bi-receipt-cutoff"></i></div>
         <div>
@@ -237,28 +237,28 @@
 <section class="appointment-benefits section-pad pt-0">
   <div class="container">
     <div class="row g-3">
-      <div class="col-md-6 col-lg-3">
+      <div class="col-6 col-lg-3 reveal">
         <div class="benefit-card">
           <div class="benefit-card__icon"><i class="bi bi-lightning-charge-fill"></i></div>
           <h3>Fast Response</h3>
           <p>Quick follow-up from a team that values your time.</p>
         </div>
       </div>
-      <div class="col-md-6 col-lg-3">
+      <div class="col-6 col-lg-3 reveal">
         <div class="benefit-card">
           <div class="benefit-card__icon"><i class="bi bi-person-badge-fill"></i></div>
           <h3>Expert Guidance</h3>
           <p>Clear, practical support from experienced consultants.</p>
         </div>
       </div>
-      <div class="col-md-6 col-lg-3">
+      <div class="col-6 col-lg-3 reveal">
         <div class="benefit-card">
           <div class="benefit-card__icon"><i class="bi bi-lock-fill"></i></div>
           <h3>Secure Process</h3>
           <p>Handle your information through a safe, confidential workflow.</p>
         </div>
       </div>
-      <div class="col-md-6 col-lg-3">
+      <div class="col-6 col-lg-3 reveal">
         <div class="benefit-card">
           <div class="benefit-card__icon"><i class="bi bi-calendar2-week-fill"></i></div>
           <h3>Convenient Booking</h3>

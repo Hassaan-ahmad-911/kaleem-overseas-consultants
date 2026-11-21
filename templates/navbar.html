@@ -2,17 +2,17 @@
 {% with url_name=request.resolver_match.url_name %}
 {% if url_name != 'services' %}
 <div class="site-topbar">
-  <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+  <div class="container d-flex justify-content-between align-items-center gap-2">
     <div class="topbar-contact d-flex flex-wrap align-items-center gap-3">
-      <span><i class="fa-solid fa-phone me-2"></i>+92 308 6898079</span>
-      <span><i class="fa-solid fa-envelope me-2"></i>kaleemoverseasconsultants@gmail.com</span>
-      <span><i class="fa-solid fa-location-dot me-2"></i>Shadman Town, Mandi Bahauddin | Bahria Town (RWP)</span>
+      <a class="topbar-phone" href="tel:{{ site.phone_tel }}"><i class="fa-solid fa-phone me-2"></i>{{ site.phone_display }}</a>
+      <span class="d-none d-md-inline-flex"><i class="fa-solid fa-envelope me-2"></i>{{ site.email }}</span>
+      <span class="d-none d-xl-inline-flex"><i class="fa-solid fa-location-dot me-2"></i>{{ site.office_area }} | {{ site.branch_office }}</span>
     </div>
     <div class="topbar-social d-flex align-items-center gap-3">
-      <a href="https://www.instagram.com/kaleemoverseasconsultants?igsh=b3V5cHg0Z2VkeDF5" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-      <a href="https://www.tiktok.com/@kaleemahmad984?_r=1&_t=ZS-97ZIcIKYRLZ" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
-      <a href="https://youtube.com/@kaleemoverseasconsultant?si=p-AouvFgj16iy3ah" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
-      <a href="https://wa.me/923086898079?text=Hello%20I%20want%20to%20book%20a%20visa%20consultation" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+      <a href="{{ site.instagram_url }}" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+      <a href="{{ site.tiktok_url }}" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+      <a href="{{ site.youtube_url }}" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+      <a href="{{ site.whatsapp_url }}" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
     </div>
   </div>
 </div>
@@ -20,9 +20,10 @@
 <nav class="navbar navbar-expand-lg navbar-light site-navbar sticky-top{% if url_name == 'services' %} site-navbar--transparent{% endif %}{% if url_name != 'services' %} site-navbar--with-topbar{% endif %}">
   <div class="container">
     <a class="navbar-brand site-brand logo" href="{% url 'home' %}">
-      <img src="{% static 'images/logo.png' %}"
-     alt="Kaleem Overseas Consultants Logo"
-     class="site-logo">
+      <picture>
+        <source srcset="{% static 'images/logo-trim.webp' %}" type="image/webp">
+        <img src="{% static 'images/logo-trim.png' %}" alt="Kaleem Overseas Consultants Logo" class="site-logo" width="800" height="175">
+      </picture>
     </a>
     <button class="navbar-toggler site-navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>

@@ -1,11 +1,24 @@
 from __future__ import annotations
 
+import re
+import secrets
 from io import BytesIO
 from pathlib import Path
 
 from django.conf import settings
+from django.contrib.staticfiles import finders
 from django.core.files.base import ContentFile
 from django.utils import timezone
+
+
+def phones_match(stored: str, entered: str) -> bool:
+    """Compare phone numbers by digits, ignoring formatting and the 0 / +92 prefix
+    (e.g. "0308-6898079" matches "+92 308 6898079")."""
+    stored_digits = re.sub(r"\D", "", stored or "")
+    entered_digits = re.sub(r"\D", "", entered or "")
+    if len(stored_digits) < 7 or len(entered_digits) < 7:
+        return bool(stored_digits) and stored_digits == entered_digits
+    return stored_digits[-10:] == entered_digits[-10:]
 
 
 def generate_appointment_number() -> str:
@@ -75,7 +88,8 @@ def generate_appointment_letter_pdf(appointment):
             cursor_y -= line_height
         return cursor_y
 
-    logo_path = Path(settings.MEDIA_ROOT) / "logo.png"
+    found_logo = finders.find("images/logo.png")
+    logo_path = Path(found_logo) if found_logo else Path(settings.STATIC_ROOT) / "images" / "logo.png"
     header_bottom = page_height - 38 * mm
     pdf.setFillColor(HexColor("#f9f5ec"))
     pdf.rect(0, header_bottom, page_width, page_height - header_bottom, fill=1, stroke=0)
@@ -164,4 +178,5 @@ def generate_appointment_letter_pdf(appointment):
     pdf.showPage()
     pdf.save()
     buffer.seek(0)
-    return f"{appointment.appointment_number}.pdf", ContentFile(buffer.read())
+    # Random suffix so the file's public /media/ URL can't be guessed from the appointment number.
+    return f"{appointment.appointment_number}-{secrets.token_hex(8)}.pdf", ContentFile(buffer.read())

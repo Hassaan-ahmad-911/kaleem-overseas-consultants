@@ -1,11 +1,14 @@
 from pathlib import Path
-from decouple import config
+from decouple import Csv, config
+from django.contrib.messages import constants as message_constants
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config("SECRET_KEY")
 DEBUG = config("DEBUG", default=False, cast=bool)
-ALLOWED_HOSTS = [
-]
+# Comma-separated, e.g. "kaleemoverseas.com,www.kaleemoverseas.com,203.0.113.10"
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost,127.0.0.1", cast=Csv())
+# Full origins incl. scheme, e.g. "https://kaleemoverseas.com,https://www.kaleemoverseas.com"
+CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", default="", cast=Csv())
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -42,6 +45,7 @@ TEMPLATES = [
                 "django.template.context_processors.media",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "core.context_processors.site_info",
             ],
         },
     },
@@ -69,7 +73,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 LANGUAGE_CODE = "en-us"
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Karachi"
 USE_I18N = True
 USE_TZ = True
 
@@ -81,3 +85,6 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Bootstrap has no "alert-error" class; render error messages as "alert-danger".
+MESSAGE_TAGS = {message_constants.ERROR: "danger"}

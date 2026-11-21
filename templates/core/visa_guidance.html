@@ -1,21 +1,32 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Visa Guidance | Kaleem Overseas Consultants Pvt. Ltd.{% endblock %}
 {% block content %}
-<section class="page-hero">
-  <div class="container">
-    <h1 class="fw-bold text-white">Visa Guidance</h1>
+<section class="page-hero page-hero--guidance">
+  <div class="container reveal">
+    <span class="page-hero__kicker"><i class="fa-solid fa-book-open"></i> Step by step</span>
+    <h1 class="text-white">Visa Guidance</h1>
     <p class="text-white-50 mb-0">Clear steps, practical document advice, and support for visit and business visas.</p>
   </div>
 </section>
 <section class="section-pad">
   <div class="container">
-    <div class="row g-4">
-      <div class="col-md-4"><div class="form-panel h-100"><h5 class="fw-bold">1. Share Your Plan</h5><p class="mb-0 text-muted">Tell us your destination, travel purpose, and preferred dates.</p></div></div>
-      <div class="col-md-4"><div class="form-panel h-100"><h5 class="fw-bold">2. Prepare Documents</h5><p class="mb-0 text-muted">We guide you through the required forms, supporting papers, and booking details.</p></div></div>
-      <div class="col-md-4"><div class="form-panel h-100"><h5 class="fw-bold">3. Book an Appointment</h5><p class="mb-0 text-muted">Meet our team for a focused consultation and next-step guidance.</p></div></div>
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-5 reveal reveal-left">
+        <div class="media-frame">
+          <img src="{% static 'images/photos/guidance-documents.webp' %}" alt="Client signing visa application documents" loading="lazy" width="1000" height="750">
+        </div>
+      </div>
+      <div class="col-lg-7">
+        <div class="row g-4">
+          <div class="col-md-4 col-lg-12 col-xl-4 reveal"><div class="form-panel step-card"><span class="step-card__number">1</span><h2 class="h5 fw-bold">Share Your Plan</h2><p class="mb-0 text-muted">Tell us your destination, travel purpose, and preferred dates.</p></div></div>
+          <div class="col-md-4 col-lg-12 col-xl-4 reveal"><div class="form-panel step-card"><span class="step-card__number">2</span><h2 class="h5 fw-bold">Prepare Documents</h2><p class="mb-0 text-muted">We guide you through the required forms, supporting papers, and booking details.</p></div></div>
+          <div class="col-md-4 col-lg-12 col-xl-4 reveal"><div class="form-panel step-card"><span class="step-card__number">3</span><h2 class="h5 fw-bold">Book an Appointment</h2><p class="mb-0 text-muted">Meet our team for a focused consultation and next-step guidance.</p></div></div>
+        </div>
+      </div>
     </div>
-    <div class="text-center mt-4">
-      <a class="btn btn-gold" href="{% url 'book_appointment' %}">Book Appointment</a>
+    <div class="text-center mt-5 reveal">
+      <a class="btn btn-gold btn-lg px-4" href="{% url 'book_appointment' %}">Book Appointment</a>
     </div>
   </div>
 </section>

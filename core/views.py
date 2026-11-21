@@ -5,6 +5,25 @@ from django.urls import reverse
 
 from .forms import AppointmentForm, AppointmentStatusLookupForm, ContactMessageForm
 from .models import Appointment, CompanyInfo, ContactMessage, Country, Gallery, Service, SuccessStory, Testimonial, TourPackage
+from .utils import phones_match
+
+# Appointment numbers this visitor has proven they own (by booking, or by number + phone lookup).
+# Only these can be viewed or have their letter downloaded from this browser session.
+VERIFIED_APPOINTMENTS_SESSION_KEY = "verified_appointments"
+
+
+def _remember_appointment(request, appointment_number):
+    verified = request.session.get(VERIFIED_APPOINTMENTS_SESSION_KEY, [])
+    if appointment_number not in verified:
+        request.session[VERIFIED_APPOINTMENTS_SESSION_KEY] = (verified + [appointment_number])[-20:]
+
+
+def _is_verified(request, appointment_number):
+    return appointment_number in request.session.get(VERIFIED_APPOINTMENTS_SESSION_KEY, [])
+
+
+def _status_url(appointment_number):
+    return f"{reverse('appointment_status')}?appointment_number={appointment_number}"
 
 
 def home(request):
@@ -141,25 +160,34 @@ def book_appointment(request):
     appointment_form = AppointmentForm(request.POST or None)
     if request.method == "POST" and appointment_form.is_valid():
         appointment = appointment_form.save()
-        messages.success(request, "Your appointment request has been submitted successfully and is awaiting approval.")
-        return redirect(f"{reverse('appointment_status')}?appointment_number={appointment.appointment_number}")
+        _remember_appointment(request, appointment.appointment_number)
+        messages.success(
+            request,
+            f"Your appointment request {appointment.appointment_number} has been submitted and is awaiting approval. "
+            "Please keep this number; you will need it with your phone number to check your status.",
+        )
+        return redirect(_status_url(appointment.appointment_number))
     return render(request, "core/book_appointment.html", {"appointment_form": appointment_form})
 
 
 def appointment_status(request):
-    lookup_form = AppointmentStatusLookupForm(request.GET or None)
     appointment = None
 
-    if lookup_form.is_valid():
-        appointment_number = lookup_form.cleaned_data["appointment_number"]
-        phone_number = lookup_form.cleaned_data["phone_number"]
-        appointments = Appointment.objects.filter(appointment_number=appointment_number)
-        if phone_number:
-            appointments = appointments.filter(phone_number=phone_number)
-        appointment = appointments.first()
-
-        if not appointment:
-            messages.error(request, "No appointment was found for the provided details.")
+    if request.method == "POST":
+        lookup_form = AppointmentStatusLookupForm(request.POST)
+        if lookup_form.is_valid():
+            appointment_number = lookup_form.cleaned_data["appointment_number"]
+            found = Appointment.objects.filter(appointment_number=appointment_number).first()
+            if found and phones_match(found.phone_number, lookup_form.cleaned_data["phone_number"]):
+                _remember_appointment(request, appointment_number)
+                return redirect(_status_url(appointment_number))
+            # Same message whether the number or the phone was wrong, so numbers can't be probed.
+            messages.error(request, "No appointment was found for that appointment number and phone number.")
+    else:
+        appointment_number = request.GET.get("appointment_number", "").strip().upper()
+        lookup_form = AppointmentStatusLookupForm(initial={"appointment_number": appointment_number} if appointment_number else None)
+        if appointment_number and _is_verified(request, appointment_number):
+            appointment = Appointment.objects.filter(appointment_number=appointment_number).first()
 
     return render(
         request,
@@ -172,6 +200,10 @@ def appointment_status(request):
 
 
 def download_appointment_letter(request, appointment_number):
+    if not (_is_verified(request, appointment_number) or request.user.is_staff):
+        messages.error(request, "Please confirm your appointment number and phone number to download your letter.")
+        return redirect(_status_url(appointment_number))
+
     appointment = get_object_or_404(Appointment, appointment_number=appointment_number)
     if appointment.status != Appointment.STATUS_APPROVED:
         raise Http404("Appointment letter is only available after approval.")
@@ -184,4 +216,4 @@ def download_appointment_letter(request, appointment_number):
         appointment.save(update_fields=["appointment_letter", "updated_at"])
 
     file_handle = appointment.appointment_letter.open("rb")
-    return FileResponse(file_handle, as_attachment=True, filename=appointment.appointment_letter.name.split("/")[-1])
+    return FileResponse(file_handle, as_attachment=True, filename=f"{appointment.appointment_number}.pdf")

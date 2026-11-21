@@ -1,10 +1,15 @@
 {% extends 'base.html' %}
+{% load static country_flags %}
 {% block title %}Home | Kaleem Overseas Consultant{% endblock %}
 {% block content %}
 <section class="hero-section" id="home">
   <div class="hero-overlay"></div>
   <div class="hero-image-layer">
-    <img src="{% static 'images/background.png' %}" alt="Travel and visa background" class="hero-background-image">
+    <picture>
+      <source srcset="{% static 'images/background.webp' %}" type="image/webp">
+      <img src="{% static 'images/background.png' %}" alt="Travel and visa background" class="hero-background-image" fetchpriority="high">
+    </picture>
+  </div>
   <div class="floating-element floating-one"></div>
   <div class="floating-element floating-two"></div>
   <div class="floating-element floating-three"></div>
@@ -138,8 +143,15 @@
       {% for country in countries %}
       <div class="col-md-6 col-xl-4 reveal">
         <div class="country-card premium-card h-100">
-          <div class="country-flag">🌍</div>
-          <h3>{{ country.name }}</h3>
+          <div class="country-card__head">
+            {% with code=country.name|flag_code %}
+              {% if code %}<span class="fi fi-{{ code }} country-flag-img" role="img" aria-label="Flag of {{ country.name }}"></span>{% else %}<span class="country-flag-fallback" aria-hidden="true"><i class="fa-solid fa-earth-americas"></i></span>{% endif %}
+            {% endwith %}
+            <div>
+              <h3>{{ country.name }}</h3>
+              <span class="country-card__tag{% if country.visa_category == 'business' %} country-card__tag--business{% endif %}">{{ country.get_visa_category_display }}</span>
+            </div>
+          </div>
           <p>{{ country.description }}</p>
           <a href="{% url 'countries' %}" class="text-link">View details <i class="fa-solid fa-arrow-right-long ms-1"></i></a>
         </div>
@@ -157,6 +169,34 @@
   </div>
 </section>
 
+<section class="section-pad pt-0 destinations-section">
+  <div class="container">
+    <div class="section-heading text-center reveal">
+      <span class="section-kicker">Trending Destinations</span>
+      <h2 class="section-title">Where our clients are travelling</h2>
+      <p class="section-lead">Visit visa guidance for some of the most requested destinations.</p>
+    </div>
+    <div class="destination-grid mt-4">
+      <a href="{% url 'visit_visa' %}" class="destination-card reveal reveal-zoom">
+        <img src="{% static 'images/photos/dest-australia.webp' %}" alt="Sydney Opera House and harbour, Australia" loading="lazy" width="640" height="800">
+        <span class="destination-card__label"><span class="fi fi-au" aria-hidden="true"></span><span><strong>Australia</strong><small>Visit visa</small></span></span>
+      </a>
+      <a href="{% url 'visit_visa' %}" class="destination-card reveal reveal-zoom">
+        <img src="{% static 'images/photos/dest-turkey.webp' %}" alt="Blue Mosque in Istanbul, Turkey" loading="lazy" width="640" height="800">
+        <span class="destination-card__label"><span class="fi fi-tr" aria-hidden="true"></span><span><strong>Turkey</strong><small>Visit visa</small></span></span>
+      </a>
+      <a href="{% url 'visit_visa' %}" class="destination-card reveal reveal-zoom">
+        <img src="{% static 'images/photos/dest-usa.webp' %}" alt="Golden Gate Bridge, United States" loading="lazy" width="640" height="800">
+        <span class="destination-card__label"><span class="fi fi-us" aria-hidden="true"></span><span><strong>USA</strong><small>Visit visa</small></span></span>
+      </a>
+      <a href="{% url 'visit_visa' %}" class="destination-card reveal reveal-zoom">
+        <img src="{% static 'images/photos/dest-thailand.webp' %}" alt="Evening street in Bangkok, Thailand" loading="lazy" width="640" height="800">
+        <span class="destination-card__label"><span class="fi fi-th" aria-hidden="true"></span><span><strong>Thailand</strong><small>Visit visa</small></span></span>
+      </a>
+    </div>
+  </div>
+</section>
+
 <section class="section-pad stats-section">
   <div class="container">
     <div class="section-heading text-center reveal">
@@ -164,19 +204,20 @@
       <h2 class="section-title">Measured results that build confidence</h2>
     </div>
     <div class="row g-4 mt-1">
-      <div class="col-md-6 col-xl-3 reveal"><div class="metric-card"><span>{{ appointments_count|default:'0' }}</span><p>Appointments booked</p></div></div>
-      <div class="col-md-6 col-xl-3 reveal"><div class="metric-card accent"><span>98%</span><p>Client satisfaction</p></div></div>
-      <div class="col-md-6 col-xl-3 reveal"><div class="metric-card"><span>17</span><p>Supported countries</p></div></div>
-      <div class="col-md-6 col-xl-3 reveal"><div class="metric-card accent"><span>24/7</span><p>Guidance availability</p></div></div>
+      <div class="col-6 col-xl-3 reveal"><div class="metric-card h-100"><span data-count-to="{{ appointments_count|default:'0' }}">{{ appointments_count|default:'0' }}</span><p>Appointments booked</p></div></div>
+      <div class="col-6 col-xl-3 reveal"><div class="metric-card h-100 accent"><span data-count-to="98" data-count-suffix="%">98%</span><p>Client satisfaction</p></div></div>
+      <div class="col-6 col-xl-3 reveal"><div class="metric-card h-100"><span data-count-to="17">17</span><p>Supported countries</p></div></div>
+      <div class="col-6 col-xl-3 reveal"><div class="metric-card h-100 accent"><span>24/7</span><p>Guidance availability</p></div></div>
     </div>
   </div>
 </section>
 
+{% if gallery_items %}
 <section class="section-pad gallery-preview-section">
   <div class="container">
     <div class="section-heading text-center reveal">
       <span class="section-kicker">Success Gallery</span>
-      <h2 class="section-title">Previously available approval stories</h2>
+      <h2 class="section-title">Recent visa approvals</h2>
       <p class="section-lead">A quick look at a few client success stories. Open the full gallery for more approved cases.</p>
     </div>
     <div class="row g-4 mt-1">
@@ -199,12 +240,6 @@
             </div>
           </div>
         </div>
-      {% empty %}
-        <div class="col-12 reveal">
-          <div class="premium-card p-4 text-center">
-            <p class="mb-0">Add gallery entries in the admin panel to display approval stories here.</p>
-          </div>
-        </div>
       {% endfor %}
     </div>
     <div class="text-center mt-4 reveal">
@@ -212,7 +247,9 @@
     </div>
   </div>
 </section>
+{% endif %}
 
+{% if testimonials %}
 <section class="section-pad testimonials-section bg-soft-navy" id="testimonials">
   <div class="container">
     <div class="section-heading text-center reveal">
@@ -243,17 +280,16 @@
             </div>
           </div>
         </div>
-      {% empty %}
-        <div class="col-12 reveal"><p class="text-white-50 text-center mb-0">Add testimonials in the admin panel to display social proof.</p></div>
       {% endfor %}
     </div>
   </div>
 </section>
+{% endif %}
 
 <section class="section-pad consultation-section" id="consultation">
   <div class="container">
     <div class="row g-4 align-items-center">
-      <div class="col-lg-5 reveal">
+      <div class="col-lg-5 reveal reveal-left">
         <div class="consultation-copy">
           <span class="section-kicker">Book Appointment</span>
           <h2 class="section-title">Schedule a consultation with our team</h2>
@@ -268,11 +304,12 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-7 reveal">
-        <div class="consultation-form-panel">
-          <div class="text-center py-4">
-            <h3 class="h5 fw-bold mb-2">Need quick help?</h3>
-            <p class="form-hint mb-0">Use the contact form or appointment page to reach our team directly.</p>
+      <div class="col-lg-7 reveal reveal-right">
+        <div class="media-frame">
+          <img src="{% static 'images/photos/home-consultation.webp' %}" alt="Visa consultant meeting with a client" loading="lazy" width="1000" height="750">
+          <div class="media-frame__card">
+            <h3>Need quick help?</h3>
+            <p>Use the contact form or appointment page to reach our team directly.</p>
           </div>
         </div>
       </div>

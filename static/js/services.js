@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const observer = new IntersectionObserver((entries, observerInstance) => {
       entries.forEach((entry, index) => {
         if (entry.isIntersecting) {
-          const delay = index * 80;
+          const delay = Math.min(index, 4) * 80;
           entry.target.style.transitionDelay = `${delay}ms`;
           entry.target.classList.add('is-visible');
           observerInstance.unobserve(entry.target);
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     revealItems.forEach((item) => item.classList.add('is-visible'));
   }
 
-  if (heroSection && heroGlow) {
+  if (heroSection && heroGlow && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     heroSection.addEventListener('mousemove', (event) => {
       const rect = heroSection.getBoundingClientRect();
       const x = ((event.clientX - rect.left) / rect.width - 0.5) * 18;
