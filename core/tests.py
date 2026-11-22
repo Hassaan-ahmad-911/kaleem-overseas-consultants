@@ -65,7 +65,7 @@ class AppointmentNumberTests(TestCase):
         self.assertEqual(appointment.appointment_number, fresh)
 
 
-@override_settings(MEDIA_ROOT=TEMP_MEDIA)
+@override_settings(MEDIA_ROOT=TEMP_MEDIA, SECURE_SSL_REDIRECT=False)
 class AppointmentPrivacyTests(TestCase):
     @classmethod
     def tearDownClass(cls):
@@ -149,7 +149,7 @@ def video_offer(**overrides):
     return Offer(**fields)
 
 
-@override_settings(MEDIA_ROOT=OFFER_MEDIA)
+@override_settings(MEDIA_ROOT=OFFER_MEDIA, SECURE_SSL_REDIRECT=False)
 class OfferTests(TestCase):
     @classmethod
     def tearDownClass(cls):

@@ -10,6 +10,11 @@ ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost,127.0.0.1", cast=Csv(
 # Full origins incl. scheme, e.g. "https://kaleemoverseas.com,https://www.kaleemoverseas.com"
 CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", default="", cast=Csv())
 
+# HTTPS: on by default when DEBUG is False (live server), off for local development.
+SECURE_SSL_REDIRECT = config("SECURE_SSL_REDIRECT", default=not DEBUG, cast=bool)
+SESSION_COOKIE_SECURE = config("SESSION_COOKIE_SECURE", default=not DEBUG, cast=bool)
+CSRF_COOKIE_SECURE = config("CSRF_COOKIE_SECURE", default=not DEBUG, cast=bool)
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
