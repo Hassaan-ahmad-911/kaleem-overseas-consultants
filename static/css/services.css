@@ -561,9 +561,11 @@ body.services-page {
 
 @media (max-width: 991.98px) {
   .services-page .site-navbar,
-  .services-page .site-navbar--transparent {
-    background: rgba(7, 28, 60, 0.96);
-    box-shadow: 0 12px 30px rgba(7, 28, 60, 0.24);
+  .services-page .site-navbar--transparent,
+  .services-page .site-navbar.scrolled {
+    background: rgba(7, 28, 60, 0.98);
+    box-shadow: 0 6px 18px rgba(7, 28, 60, 0.24);
+    backdrop-filter: none;
   }
 
   .services-page .site-navbar-toggler {
@@ -572,6 +574,42 @@ body.services-page {
 
   .services-page .navbar-toggler-icon {
     filter: invert(1);
+  }
+
+  /* Compact mobile Visa list on the navy navbar */
+  .services-page .navbar-nav .nav-link.active {
+    border-left-color: var(--services-gold);
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .services-page .site-navbar .visa-mega-menu__inner {
+    background: none;
+  }
+
+  .services-page .site-navbar .visa-mega-menu__grid {
+    border-left-color: rgba(255, 255, 255, 0.18);
+  }
+
+  .services-page .site-navbar .visa-mega-card {
+    background: none;
+  }
+
+  .services-page .site-navbar .visa-mega-card:hover,
+  .services-page .site-navbar .visa-mega-card:focus-within {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .services-page .site-navbar .visa-mega-card__icon {
+    color: var(--services-gold);
+  }
+
+  .services-page .site-navbar .visa-mega-card__btn {
+    background: none;
+    color: transparent;
+  }
+
+  .services-page .site-navbar .visa-mega-card__chevron {
+    color: rgba(255, 255, 255, 0.6);
   }
 
   .services-hero {

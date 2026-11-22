@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 
-from .models import Appointment, CompanyInfo, ContactMessage, Country, Gallery, Service, SuccessStory, Testimonial, TourPackage
+from .models import Appointment, CompanyInfo, ContactMessage, Country, Gallery, Offer, Service, SuccessStory, Testimonial, TourPackage
 
 
 @admin.register(Country)
@@ -180,5 +180,61 @@ class SuccessStoryAdmin(admin.ModelAdmin):
                 obj.video.url,
             )
         return "No video uploaded yet."
+
+    video_preview.short_description = "Video Preview"
+
+
+@admin.register(Offer)
+class OfferAdmin(admin.ModelAdmin):
+    list_display = ("thumbnail", "title", "media_type", "discount_label", "offer_price", "valid_until", "is_active", "display_order")
+    list_display_links = ("thumbnail", "title")
+    list_editable = ("is_active", "display_order")
+    list_filter = ("is_active", "media_type")
+    search_fields = ("title",)
+    readonly_fields = ("banner_preview", "video_preview", "created_at")
+    save_on_top = True
+    fieldsets = (
+        ("Offer details", {"fields": ("title", "short_description", "description")}),
+        ("Media", {
+            "fields": ("media_type", "banner_image", "banner_preview", "video_file", "video_url", "video_preview"),
+            "description": "Banner offer: upload a wide 16:9 banner (recommended 1920 x 1080 px). "
+                           "Video offer: upload an MP4 under 50 MB, or paste a YouTube link. A banner image is used as the video's poster.",
+        }),
+        ("Pricing & validity", {"fields": ("discount_label", "original_price", "offer_price", "valid_until")}),
+        ("Visibility", {"fields": ("is_active", "display_order", "created_at")}),
+    )
+
+    def thumbnail(self, obj):
+        if obj.banner_image:
+            return format_html(
+                '<img src="{}" style="width:96px;height:40px;object-fit:cover;border-radius:8px;box-shadow:0 6px 16px rgba(7,28,60,0.16);" />',
+                obj.banner_image.url,
+            )
+        return "Video" if obj.is_video else "-"
+
+    thumbnail.short_description = "Preview"
+
+    def banner_preview(self, obj):
+        if obj and obj.banner_image:
+            return format_html(
+                '<img src="{}" style="max-width:480px;width:100%;height:auto;border-radius:12px;" />',
+                obj.banner_image.url,
+            )
+        return "No banner uploaded yet."
+
+    banner_preview.short_description = "Banner Preview"
+
+    def video_preview(self, obj):
+        if obj and obj.video_file:
+            return format_html(
+                '<video controls style="max-width:480px;width:100%;border-radius:12px;" preload="metadata"><source src="{}"></video>',
+                obj.video_file.url,
+            )
+        if obj and obj.youtube_embed_url:
+            return format_html(
+                '<iframe src="{}" style="width:480px;max-width:100%;aspect-ratio:16/9;border:0;border-radius:12px;" allowfullscreen></iframe>',
+                obj.youtube_embed_url,
+            )
+        return "No video added yet."
 
     video_preview.short_description = "Video Preview"

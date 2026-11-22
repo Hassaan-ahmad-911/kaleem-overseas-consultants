@@ -1,0 +1,26 @@
+{% comment %}
+16:9 offer frame: the banner, uploaded video or YouTube player is shown whole (contain, never cropped);
+a blurred, darkened copy of the banner fills the empty space behind it.
+Params: offer, autoplay (home slider), eager (first slide).
+{% endcomment %}
+<div class="offer-frame">
+  {% if offer.banner_image %}<img class="offer-frame__backdrop" src="{{ offer.banner_image.url }}" alt="" aria-hidden="true">{% endif %}
+  <div class="offer-frame__media">
+    {% if offer.is_video and offer.video_file %}
+      <video class="offer-frame__video" controls preload="metadata"{% if autoplay %} muted playsinline data-offer-autoplay{% endif %}{% if offer.banner_image %} poster="{{ offer.banner_image.url }}"{% endif %}>
+        <source src="{{ offer.video_file.url }}">
+        Your browser does not support the video tag.
+      </video>
+    {% elif offer.is_video and offer.youtube_embed_url %}
+      <iframe class="offer-frame__iframe"
+              src="{{ offer.youtube_embed_url }}?rel=0&amp;playsinline=1&amp;enablejsapi=1"
+              title="{{ offer.title }}"
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen></iframe>
+    {% elif offer.banner_image %}
+      <img class="offer-frame__image" src="{{ offer.banner_image.url }}" alt="{{ offer.title }}"{% if eager %} fetchpriority="high"{% else %} loading="lazy"{% endif %}>
+    {% endif %}
+  </div>
+</div>

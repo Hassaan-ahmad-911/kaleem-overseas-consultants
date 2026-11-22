@@ -343,6 +343,10 @@ table {
   transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
 }
 
+.visa-mega-card__chevron {
+  display: none;
+}
+
 .visa-mega-card__btn:hover {
   background: linear-gradient(135deg, var(--red), #ff5d68);
   color: #fff;
@@ -1745,11 +1749,19 @@ main {
     padding-top: 0;
   }
 
+  /* Mobile navbar: no backdrop blur (the background is opaque anyway) and a light shadow,
+     so scrolling and opening the menu don't repaint blurred layers every frame. */
   .site-navbar {
     position: sticky;
     top: 0;
     height: auto;
     background: rgba(255, 255, 255, 0.99);
+    backdrop-filter: none;
+    box-shadow: 0 4px 14px rgba(7, 28, 60, 0.08);
+  }
+
+  .site-navbar.scrolled {
+    box-shadow: 0 6px 18px rgba(7, 28, 60, 0.1);
   }
 
   .site-navbar .container {
@@ -1766,10 +1778,19 @@ main {
     max-width: none;
   }
 
+  /* An open menu taller than the screen scrolls inside itself, not the page behind it. */
   .navbar-collapse {
+    max-height: calc(100vh - var(--navbar-height));
+    max-height: calc(100dvh - var(--navbar-height));
     margin-top: 0.75rem;
-    padding: 1rem 0.25rem 0.5rem;
+    padding: 0.75rem 0 0.5rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
     border-top: 1px solid rgba(7, 28, 60, 0.08);
+  }
+
+  .site-navbar .navbar-collapse.collapsing {
+    transition: height 0.22s ease;
   }
 
   .navbar-nav {
@@ -1781,43 +1802,199 @@ main {
     gap: 0;
   }
 
-  .nav-link {
-    padding: 0.75rem 0.35rem;
-    font-size: 1.02rem;
+  .navbar-nav .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 44px;
+    padding: 0.6rem 0.75rem;
+    border-left: 3px solid transparent;
+    border-radius: 0 8px 8px 0;
+    font-size: 1rem;
+    transition: color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .navbar-nav .nav-link:hover,
+  .navbar-nav .nav-link:focus {
+    transform: none;
+  }
+
+  .navbar-nav .nav-link:focus-visible {
+    outline: 2px solid rgba(230, 57, 70, 0.45);
+    outline-offset: -2px;
+    box-shadow: none;
+  }
+
+  /* No stretched underline on mobile: the active item gets a left border and red text instead. */
+  .navbar-nav .nav-link::after {
+    display: none;
+  }
+
+  .navbar-nav .nav-link.active {
+    border-left-color: var(--red);
+    background: rgba(230, 57, 70, 0.06);
+  }
+
+  /* "Visa" toggle: chevron on the right that flips when open (CSS-drawn, no icon font needed). */
+  .navbar-nav .visa-mega-dropdown > .dropdown-toggle {
+    justify-content: space-between;
+  }
+
+  .navbar-nav .visa-mega-dropdown > .dropdown-toggle::after {
+    display: inline-block;
+    position: static;
+    width: 0.5rem;
+    height: 0.5rem;
+    margin: -0.25rem 0.4rem 0 auto;
+    border: solid currentColor;
+    border-width: 0 2px 2px 0;
+    background: none;
+    opacity: 0.7;
+    transform: rotate(45deg);
+    transition: transform 0.22s ease, margin 0.22s ease;
+  }
+
+  .navbar-nav .visa-mega-dropdown > .dropdown-toggle[aria-expanded="true"]::after {
+    margin-top: 0.25rem;
+    transform: rotate(-135deg);
   }
 
   .visa-mega-dropdown {
     position: relative;
   }
 
-  .visa-mega-menu {
+  /* Visa sub-menu: a compact list that opens with a short height animation (0fr -> 1fr grid rows). */
+  .site-navbar .visa-mega-menu {
     position: static !important;
-    transform: none !important;
+    display: grid;
+    grid-template-rows: 0fr;
     width: 100%;
     max-width: 100%;
+    min-width: 0;
+    margin: 0 !important;
     opacity: 1;
-    visibility: visible;
+    visibility: hidden;
     pointer-events: auto;
-    display: none;
-    margin-top: 0.35rem !important;
-  }
-
-  .visa-mega-menu.show {
-    display: block;
     transform: none !important;
+    transition: grid-template-rows 0.22s ease, visibility 0s linear 0.22s;
   }
 
-  .visa-mega-menu__inner {
-    padding: 0.85rem;
-    border-radius: 18px;
+  .site-navbar .visa-mega-menu.show {
+    grid-template-rows: 1fr;
+    visibility: visible;
+    transition: grid-template-rows 0.22s ease, visibility 0s;
   }
 
-  .visa-mega-card {
-    margin-bottom: 0;
+  .site-navbar .visa-mega-menu__inner {
+    min-height: 0;
+    overflow: hidden;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    backdrop-filter: none;
+    box-shadow: none;
   }
 
-  .visa-mega-menu__grid > [class*="col-"] {
-    margin-bottom: 0.5rem;
+  .site-navbar .visa-mega-menu__grid {
+    --bs-gutter-x: 0;
+    --bs-gutter-y: 0;
+    flex-direction: column;
+    width: auto;
+    margin: 0.15rem 0 0.4rem 1rem;
+    border-left: 2px solid rgba(7, 28, 60, 0.1);
+  }
+
+  .site-navbar .visa-mega-menu__grid > [class*="col-"] {
+    flex: 0 0 auto;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .site-navbar .visa-mega-card {
+    position: relative;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.7rem;
+    min-height: 44px;
+    padding: 0.5rem 0.75rem;
+    border: 0;
+    border-radius: 0 8px 8px 0;
+    background: none;
+    box-shadow: none;
+    transition: background-color 0.15s ease;
+  }
+
+  .site-navbar .visa-mega-card:hover,
+  .site-navbar .visa-mega-card:focus-within {
+    border-color: transparent;
+    background: rgba(13, 59, 102, 0.05);
+    box-shadow: none;
+    transform: none;
+  }
+
+  .site-navbar .visa-mega-card__icon {
+    width: 1.25rem;
+    height: auto;
+    margin: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    font-size: 1.1rem;
+  }
+
+  .site-navbar .visa-mega-card__icon.visit { color: var(--navy); }
+  .site-navbar .visa-mega-card__icon.business { color: #a87400; }
+  .site-navbar .visa-mega-card__icon.guidance { color: var(--red); }
+
+  .site-navbar .visa-mega-card h3 {
+    flex: 1;
+    margin: 0;
+    font-size: 0.98rem;
+    font-weight: 600;
+  }
+
+  .site-navbar .visa-mega-card p {
+    display: none;
+  }
+
+  /* The "Explore ..." link is hidden visually but stretched over the whole row, so the row is the link. */
+  .site-navbar .visa-mega-card__btn {
+    position: static;
+    margin: 0;
+    padding: 0;
+    background: none;
+    color: transparent;
+    font-size: 0;
+    line-height: 0;
+  }
+
+  .site-navbar .visa-mega-card__btn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+
+  .site-navbar .visa-mega-card__btn:hover {
+    background: none;
+    transform: none;
+  }
+
+  .site-navbar .visa-mega-card__btn:focus-visible {
+    outline: none;
+  }
+
+  .site-navbar .visa-mega-card__btn:focus-visible::after {
+    outline: 2px solid var(--red);
+    outline-offset: -2px;
+  }
+
+  .site-navbar .visa-mega-card__chevron {
+    display: inline-block;
+    color: var(--muted);
+    font-size: 0.7rem;
   }
 
   .navbar-cta-wrap {
@@ -2577,6 +2754,609 @@ main {
 }
 
 /* ==========================================================================
+   Offers & Deals: home page slider and Offers page
+   ========================================================================== */
+
+.offers-section {
+  padding: 48px 0 32px;
+  scroll-margin-top: calc(var(--topbar-height) + var(--navbar-height));
+}
+
+.offers-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.offers-heading {
+  margin-bottom: 1.25rem;
+}
+
+.offers-heading__title {
+  margin: 0.6rem 0 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--navy-deep);
+}
+
+/* Crossfade instead of sliding; Bootstrap reads this duration for its own timing. */
+.offers-carousel.carousel-fade .carousel-item {
+  transition: opacity 0.7s ease;
+}
+
+.offers-carousel.carousel-fade .active.carousel-item-start,
+.offers-carousel.carousel-fade .active.carousel-item-end {
+  transition: opacity 0s 0.7s;
+}
+
+.offer-slide__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 24px;
+  align-items: center;
+}
+
+/* 16:9 frame: the whole banner/video (contain, never cropped) over a blurred copy of the banner. */
+.offer-frame {
+  position: relative;
+  isolation: isolate;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 12px;
+  background: var(--navy-deep);
+  box-shadow: 0 18px 40px rgba(7, 28, 60, 0.16);
+}
+
+.offer-frame__backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(20px) brightness(0.6);
+  transform: scale(1.2);
+}
+
+.offer-frame__media {
+  width: 100%;
+  height: 100%;
+}
+
+.offer-frame__image,
+.offer-frame__video,
+.offer-frame__iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: contain;
+}
+
+.offer-badge {
+  display: inline-flex;
+  margin-bottom: 0.75rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--gold), #ffcd4e);
+  color: var(--navy-deep);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  box-shadow: 0 10px 22px rgba(244, 180, 0, 0.3);
+}
+
+.offer-caption {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.offer-caption .offer-badge {
+  margin-bottom: 0.6rem;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.75rem;
+}
+
+.offer-caption__title {
+  margin: 0 0 0.4rem;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.offer-caption__title a {
+  color: var(--navy-deep);
+}
+
+.offer-caption__title a:hover,
+.offer-caption__title a:focus-visible {
+  color: var(--red);
+}
+
+.offer-caption__text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+  margin-bottom: 0.6rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.offer-prices {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 0.25rem;
+}
+
+.offer-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--red);
+}
+
+.offer-price-old {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.offer-validity {
+  margin-bottom: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* Live countdown (static/js/offers.js) */
+.offer-countdown {
+  margin: 0.35rem 0 0.45rem;
+}
+
+.offer-countdown__head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.offer-countdown__label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.offer-countdown__soon {
+  display: none;
+  padding: 0.12rem 0.5rem;
+  border-radius: 999px;
+  background: var(--red);
+  color: #fff;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.offer-countdown__boxes {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.offer-countdown__box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 52px;
+  padding: 0.35rem 0.4rem 0.3rem;
+  border: 1px solid rgba(7, 28, 60, 0.12);
+  border-radius: 10px;
+  background: #f7f9fc;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.offer-countdown__num {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  color: var(--navy-deep);
+}
+
+.offer-countdown__unit {
+  margin-top: 0.1rem;
+  font-size: 0.64rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.offer-countdown__ended {
+  display: none;
+  margin: 0;
+  color: var(--red);
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+/* Under 24 hours left */
+.offer-countdown.is-urgent .offer-countdown__soon {
+  display: inline-flex;
+}
+
+.offer-countdown.is-urgent .offer-countdown__box {
+  border-color: rgba(230, 57, 70, 0.35);
+  background: rgba(230, 57, 70, 0.06);
+}
+
+.offer-countdown.is-urgent .offer-countdown__num {
+  color: var(--red);
+}
+
+.offer-countdown.is-urgent .offer-countdown__box:last-child {
+  animation: countdownPulse 1s ease-in-out infinite;
+}
+
+/* Reached zero */
+.offer-countdown.is-ended .offer-countdown__head,
+.offer-countdown.is-ended .offer-countdown__boxes {
+  display: none;
+}
+
+.offer-countdown.is-ended .offer-countdown__ended {
+  display: block;
+}
+
+@keyframes countdownPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+    box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.12);
+  }
+}
+
+.offer-card .offer-countdown__box {
+  min-width: 46px;
+  padding: 0.3rem 0.35rem 0.25rem;
+}
+
+.offer-card .offer-countdown__num {
+  font-size: 1rem;
+}
+
+.offer-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+}
+
+.offer-controls__arrow {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid rgba(7, 28, 60, 0.14);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--navy-deep);
+  font-size: 0.8rem;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.offer-controls__arrow:hover,
+.offer-controls__arrow:focus-visible {
+  border-color: var(--navy-deep);
+  background: var(--navy-deep);
+  color: #fff;
+}
+
+.offer-dots {
+  display: flex;
+  align-items: center;
+}
+
+.offer-dot {
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 3px;
+  border: 0;
+  background: none;
+}
+
+.offer-dot__track {
+  position: relative;
+  display: block;
+  width: 8px;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(7, 28, 60, 0.2);
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.offer-dot.is-current .offer-dot__track {
+  width: 28px;
+  background: rgba(230, 57, 70, 0.22);
+}
+
+.offer-dot__fill {
+  position: absolute;
+  inset: 0;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.offer-dot.is-current .offer-dot__fill {
+  transform: scaleX(1);
+}
+
+/* Auto-rotation (2+ offers, motion allowed): the active dot fills over 5s; main.js moves on when it completes. */
+.offers-carousel.is-auto .offer-dot.is-current .offer-dot__fill {
+  transform: scaleX(0);
+}
+
+.offers-carousel.is-auto .carousel-item.active .offer-dot.is-current .offer-dot__fill {
+  animation: offerProgress 5s linear forwards;
+}
+
+.offers-carousel.is-holding .offer-dot__fill,
+.offers-carousel:has(:focus-visible) .offer-dot__fill {
+  animation-play-state: paused !important;
+}
+
+@media (hover: hover) {
+  .offers-carousel:hover .offer-dot__fill {
+    animation-play-state: paused !important;
+  }
+}
+
+.offer-controls__all {
+  margin-left: 0.35rem;
+  color: var(--red);
+  font-size: 0.92rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.offer-controls__all:hover,
+.offer-controls__all:focus-visible {
+  color: var(--navy);
+}
+
+/* Slide change: incoming banner settles from a slight zoom; caption items rise in, staggered. */
+.offer-slide.is-entering .offer-frame__media {
+  animation: offerZoom 1.2s ease-out both;
+}
+
+.offer-slide.is-entering .offer-caption > * {
+  animation: offerCaptionIn 0.6s ease both;
+}
+
+.offer-slide.is-entering .offer-caption > :nth-child(2) { animation-delay: 0.08s; }
+.offer-slide.is-entering .offer-caption > :nth-child(3) { animation-delay: 0.16s; }
+.offer-slide.is-entering .offer-caption > :nth-child(4) { animation-delay: 0.24s; }
+.offer-slide.is-entering .offer-caption > :nth-child(5) { animation-delay: 0.32s; }
+.offer-slide.is-entering .offer-caption > :nth-child(6) { animation-delay: 0.4s; }
+.offer-slide.is-entering .offer-caption > :nth-child(7) { animation-delay: 0.48s; }
+
+@keyframes offerZoom {
+  from {
+    transform: scale(1.04);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes offerCaptionIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes offerProgress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Offers page */
+.page-hero--offers { --page-hero-image: url('../images/photos/about-commitment.webp'); }
+
+.offer-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 24px;
+  background: #fff;
+  border: 1px solid rgba(7, 28, 60, 0.08);
+  box-shadow: 0 20px 45px rgba(7, 28, 60, 0.08);
+  scroll-margin-top: calc(var(--topbar-height) + var(--navbar-height) + 16px);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.offer-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 26px 55px rgba(7, 28, 60, 0.12);
+}
+
+.offer-card:target {
+  box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.35), 0 26px 55px rgba(7, 28, 60, 0.12);
+}
+
+.offer-card__frame {
+  padding: 1rem 1rem 0;
+}
+
+.offer-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 1.25rem 1.4rem 1.4rem;
+}
+
+.offer-card .offer-title {
+  margin-bottom: 0.5rem;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--navy-deep);
+}
+
+.offer-card .offer-text {
+  margin-bottom: 0.75rem;
+  color: var(--muted);
+}
+
+.offer-description {
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+.offer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+
+.offer-actions .btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+}
+
+.btn-offer-whatsapp {
+  border: none;
+  border-radius: 999px;
+  padding: 0.85rem 1.55rem;
+  background: #25d366;
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 14px 28px rgba(37, 211, 102, 0.28);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.btn-offer-whatsapp:hover,
+.btn-offer-whatsapp:focus-visible {
+  background: #1ebe5d;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 20px 36px rgba(37, 211, 102, 0.34);
+}
+
+.offers-empty {
+  max-width: 620px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+  border-radius: 28px;
+  background: #fff;
+  border: 1px solid rgba(7, 28, 60, 0.08);
+  box-shadow: 0 20px 45px rgba(7, 28, 60, 0.08);
+  text-align: center;
+}
+
+.offers-empty__icon {
+  display: inline-grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  margin-bottom: 1rem;
+  border-radius: 22px;
+  background: linear-gradient(135deg, var(--gold), #ffcd4e);
+  color: var(--navy-deep);
+  font-size: 1.6rem;
+}
+
+.offers-empty h2 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--navy-deep);
+}
+
+.offers-empty p {
+  margin-bottom: 1.5rem;
+  color: var(--muted);
+}
+
+/* Tablet: same two columns, 55/45. */
+@media (max-width: 991.98px) {
+  .offer-slide__grid {
+    grid-template-columns: minmax(0, 55fr) minmax(0, 45fr);
+  }
+}
+
+/* Phones: banner on top, centred caption below; the whole section fits one screen. */
+@media (max-width: 575.98px) {
+  .offers-section {
+    padding: 32px 0 20px;
+  }
+
+  .offers-heading {
+    margin-bottom: 0.9rem;
+  }
+
+  .offers-heading__title {
+    font-size: 1.3rem;
+  }
+
+  .offer-slide__grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .offer-caption {
+    align-items: center;
+    text-align: center;
+  }
+
+  .offer-caption__text {
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+
+  .offer-prices,
+  .offer-controls,
+  .offer-caption .offer-countdown__head,
+  .offer-caption .offer-countdown__boxes {
+    justify-content: center;
+  }
+
+  .offer-card__body {
+    padding: 1.1rem 1.2rem 1.25rem;
+  }
+}
+
+/* ==========================================================================
    Reduced motion: show everything in its final state
    ========================================================================== */
 
@@ -2601,6 +3381,12 @@ main {
 
   .site-intro {
     display: none !important;
+  }
+
+  .offer-slide.is-entering .offer-frame__media,
+  .offer-slide.is-entering .offer-caption > *,
+  .offer-countdown.is-urgent .offer-countdown__box:last-child {
+    animation: none !important;
   }
 }
 

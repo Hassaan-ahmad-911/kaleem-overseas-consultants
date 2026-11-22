@@ -52,6 +52,7 @@
                     <h3>Visit Visa</h3>
                     <p>Professional visit visa consultancy for multiple countries.</p>
                     <a href="{% url 'visit_visa' %}" class="visa-mega-card__btn">Explore Visit Visas</a>
+                    <i class="fa-solid fa-chevron-right visa-mega-card__chevron" aria-hidden="true"></i>
                   </article>
                 </div>
                 <div class="col-12 col-md-6 col-lg-4 d-flex">
@@ -60,6 +61,7 @@
                     <h3>Business Visa</h3>
                     <p>Business visa consultancy for China, Germany and Netherlands.</p>
                     <a href="{% url 'business_visa' %}" class="visa-mega-card__btn">Explore Business Visas</a>
+                    <i class="fa-solid fa-chevron-right visa-mega-card__chevron" aria-hidden="true"></i>
                   </article>
                 </div>
                 <div class="col-12 col-md-6 col-lg-4 d-flex">
@@ -68,6 +70,7 @@
                     <h3>Visa Guidance</h3>
                     <p>Visa process, documentation requirements, interview tips and FAQs.</p>
                     <a href="{% url 'visa_guidance' %}" class="visa-mega-card__btn">Read Guidance</a>
+                    <i class="fa-solid fa-chevron-right visa-mega-card__chevron" aria-hidden="true"></i>
                   </article>
                 </div>
               </div>
@@ -75,7 +78,7 @@
           </div>
         </li>
         <li class="nav-item">
-          <a class="nav-link{% if url_name == 'packages' or url_name == 'package_detail' %} active{% endif %}" href="{% url 'packages' %}">Tour Packages</a>
+          <a class="nav-link{% if url_name == 'offers' %} active{% endif %}" href="{% url 'offers' %}">Offers &amp; Deals</a>
         </li>
         <li class="nav-item">
           <a class="nav-link nav-link-stories{% if url_name == 'stories' %} active{% endif %}" href="{% url 'stories' %}">

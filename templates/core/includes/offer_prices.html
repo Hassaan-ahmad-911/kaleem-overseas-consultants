@@ -1,0 +1,10 @@
+{% load formatting %}
+{% comment %}Prices, then the live countdown, then the "Valid until" date (home slider caption and Offers page cards).{% endcomment %}
+{% if offer.offer_price is not None or offer.original_price is not None %}
+  <p class="offer-prices">
+    {% if offer.offer_price is not None and offer.original_price is not None %}<s class="offer-price-old">{{ offer.original_price|pkr }}</s>{% endif %}
+    <strong class="offer-price">{% if offer.offer_price is not None %}{{ offer.offer_price|pkr }}{% else %}{{ offer.original_price|pkr }}{% endif %}</strong>
+  </p>
+{% endif %}
+{% include 'core/includes/offer_countdown.html' %}
+{% if offer.valid_until %}<p class="offer-validity"><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>Valid until {{ offer.valid_until|date:"j M Y" }}</p>{% endif %}

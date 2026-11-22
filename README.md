@@ -4,11 +4,12 @@ Django website for Kaleem Overseas Consultants Pvt. Ltd., a visa consultancy and
 
 ## Features
 
-- Public pages: Home, About, Services, Visit Visa, Business Visa, Visa Guidance, Countries, Tour Packages, Gallery, Success Stories, Contact
+- Public pages: Home, About, Services, Visit Visa, Business Visa, Visa Guidance, Countries, Offers & Deals, Gallery, Success Stories, Contact
+- Offers & Deals: banner or video offers (uploaded MP4/WebM under 50 MB, or a YouTube link) shown in a slider on the home page and on the Offers page; they hide automatically after their "valid until" date
 - Appointment booking with automatic appointment numbers (`KOC-<year><0001>`)
 - Appointment status lookup (appointment number + phone number) and PDF appointment letter download once approved
 - Contact form (messages are stored and read in the admin)
-- Django admin for all content: services, countries, appointments (approve/reject), contact messages, testimonials, gallery, tour packages, success stories
+- Django admin for all content: services, countries, appointments (approve/reject), contact messages, testimonials, gallery, offers, success stories (old tour packages are kept in the admin; /packages/ now redirects to Offers & Deals)
 
 ## Tech stack
 

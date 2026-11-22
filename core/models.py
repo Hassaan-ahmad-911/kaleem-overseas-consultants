@@ -1,7 +1,13 @@
+from datetime import datetime, time
+from zoneinfo import ZoneInfo
+
+from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator, MinValueValidator
 from django.db import IntegrityError, models, transaction
 from django.utils import timezone
 
 from .utils import generate_appointment_letter_pdf, generate_appointment_number
+from .validators import validate_video_size, youtube_video_id
 
 
 class CompanyInfo(models.Model):
@@ -231,3 +237,93 @@ class SuccessStory(models.Model):
 
     def __str__(self):
         return f"{self.client_name} - {self.country}"
+
+
+PAKISTAN_TZ = ZoneInfo("Asia/Karachi")
+
+
+class OfferQuerySet(models.QuerySet):
+    def visible(self):
+        """Active offers that have not expired (no expiry date, or valid until today or later)."""
+        today = timezone.localdate()
+        return self.filter(is_active=True).filter(models.Q(valid_until__isnull=True) | models.Q(valid_until__gte=today))
+
+
+class Offer(models.Model):
+    MEDIA_IMAGE = "image"
+    MEDIA_VIDEO = "video"
+
+    MEDIA_TYPE_CHOICES = [
+        (MEDIA_IMAGE, "Banner image"),
+        (MEDIA_VIDEO, "Video"),
+    ]
+
+    title = models.CharField(max_length=150)
+    short_description = models.CharField(max_length=200, help_text="One or two lines shown on the slider and offer cards.")
+    description = models.TextField(blank=True, help_text="Optional full details shown on the Offers & Deals page.")
+    media_type = models.CharField(max_length=10, choices=MEDIA_TYPE_CHOICES, default=MEDIA_IMAGE)
+    banner_image = models.ImageField(
+        upload_to="offers/banners/",
+        blank=True,
+        help_text="Required for banner offers. Recommended size 1920 x 1080 px (wide 16:9). For video offers it is used as the poster/thumbnail (optional but recommended).",
+    )
+    video_file = models.FileField(
+        upload_to="offers/videos/",
+        blank=True,
+        validators=[FileExtensionValidator(allowed_extensions=["mp4", "webm"]), validate_video_size],
+        help_text="Video offers: upload an MP4 (or WebM) under 50 MB, or paste a YouTube link below instead.",
+    )
+    video_url = models.URLField(
+        blank=True,
+        help_text="Video offers: YouTube link (youtube.com/watch?v=..., youtu.be/... or youtube.com/shorts/...).",
+    )
+    discount_label = models.CharField(max_length=40, blank=True, help_text='Optional badge, e.g. "20% OFF".')
+    original_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, validators=[MinValueValidator(0)], help_text="PKR, optional.")
+    offer_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, validators=[MinValueValidator(0)], help_text="PKR, optional.")
+    valid_until = models.DateField(blank=True, null=True, help_text="Leave blank for no expiry. The offer hides automatically after this date.")
+    is_active = models.BooleanField(default=True)
+    display_order = models.PositiveIntegerField(default=0, help_text="Lower numbers show first.")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    objects = OfferQuerySet.as_manager()
+
+    class Meta:
+        ordering = ["display_order", "-created_at"]
+        verbose_name = "Offer"
+        verbose_name_plural = "Offers & Deals"
+
+    def __str__(self):
+        return self.title
+
+    def clean(self):
+        super().clean()
+        if self.media_type == self.MEDIA_IMAGE:
+            if not self.banner_image:
+                raise ValidationError({"banner_image": "Banner offers need a banner image."})
+        elif self.media_type == self.MEDIA_VIDEO:
+            if bool(self.video_file) == bool(self.video_url):
+                raise ValidationError("Video offers need exactly one video: either upload a video file or paste a YouTube link, not both.")
+            if self.video_url and not youtube_video_id(self.video_url):
+                raise ValidationError({"video_url": "Enter a YouTube link like youtube.com/watch?v=..., youtu.be/... or youtube.com/shorts/...."})
+        if self.original_price is not None and self.offer_price is not None and self.offer_price > self.original_price:
+            raise ValidationError({"offer_price": "The offer price should not be higher than the original price."})
+
+    @property
+    def is_video(self):
+        return self.media_type == self.MEDIA_VIDEO
+
+    @property
+    def ends_at(self):
+        """When the offer ends: the last second of its valid_until day in Pakistan time (None if it never expires)."""
+        if not self.valid_until:
+            return None
+        return datetime.combine(self.valid_until, time(23, 59, 59), tzinfo=PAKISTAN_TZ)
+
+    @property
+    def youtube_embed_url(self):
+        video_id = youtube_video_id(self.video_url)
+        return f"https://www.youtube.com/embed/{video_id}" if video_id else ""
+
+    @property
+    def whatsapp_message(self):
+        return f"Hello, I am interested in your offer: {self.title}"

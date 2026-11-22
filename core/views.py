@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
 from .forms import AppointmentForm, AppointmentStatusLookupForm, ContactMessageForm
-from .models import Appointment, CompanyInfo, ContactMessage, Country, Gallery, Service, SuccessStory, Testimonial, TourPackage
+from .models import Appointment, CompanyInfo, ContactMessage, Country, Gallery, Offer, Service, SuccessStory, Testimonial
 from .utils import phones_match
 
 # Appointment numbers this visitor has proven they own (by booking, or by number + phone lookup).
@@ -39,6 +39,7 @@ def home(request):
         request,
         "core/home.html",
         {
+            "offers": Offer.objects.visible(),
             "countries": countries,
             "testimonials": testimonials,
             "services": services,
@@ -59,22 +60,17 @@ def services(request):
     return render(request, "core/services.html", {"services_list": services_list})
 
 
+def offers(request):
+    return render(request, "core/offers.html", {"offers": Offer.objects.visible()})
+
+
+# Tour Packages were replaced by Offers & Deals; keep old links (bookmarks, shared URLs) working.
 def packages(request):
-    tour_packages = TourPackage.objects.all()
-    return render(request, "core/packages.html", {"tour_packages": tour_packages})
+    return redirect("offers")
 
 
 def package_detail(request, pk):
-    package = get_object_or_404(TourPackage, pk=pk)
-    related_packages = TourPackage.objects.exclude(pk=pk)[:3]
-    return render(
-        request,
-        "core/package_detail.html",
-        {
-            "package": package,
-            "related_packages": related_packages,
-        },
-    )
+    return redirect("offers")
 
 
 def stories(request):

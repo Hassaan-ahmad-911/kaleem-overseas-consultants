@@ -1,0 +1,19 @@
+{% comment %}
+Live countdown to offer.ends_at (absolute ISO 8601 time with offset, so it is correct in any timezone).
+Hidden until static/js/offers.js fills it in; without JavaScript only the "Valid until" date shows.
+{% endcomment %}
+{% if offer.ends_at %}
+  <div class="offer-countdown" data-ends-at="{{ offer.ends_at.isoformat }}" hidden>
+    <div class="offer-countdown__head">
+      <span class="offer-countdown__label">Offer ends in</span>
+      <span class="offer-countdown__soon">Ending soon</span>
+    </div>
+    <div class="offer-countdown__boxes" role="timer">
+      <span class="offer-countdown__box"><span class="offer-countdown__num" data-unit="days">00</span><span class="offer-countdown__unit">days</span></span>
+      <span class="offer-countdown__box"><span class="offer-countdown__num" data-unit="hours">00</span><span class="offer-countdown__unit">hrs</span></span>
+      <span class="offer-countdown__box"><span class="offer-countdown__num" data-unit="minutes">00</span><span class="offer-countdown__unit">min</span></span>
+      <span class="offer-countdown__box"><span class="offer-countdown__num" data-unit="seconds">00</span><span class="offer-countdown__unit">sec</span></span>
+    </div>
+    <p class="offer-countdown__ended">Offer ended</p>
+  </div>
+{% endif %}

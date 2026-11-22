@@ -3,29 +3,52 @@ document.addEventListener('DOMContentLoaded', () => {
   const revealItems = document.querySelectorAll('.reveal');
   const megaDropdown = document.querySelector('.visa-mega-dropdown');
 
+  // Passive scroll listener that only touches the DOM when the "scrolled" state actually changes.
+  let navScrolled = null;
   const onScroll = () => {
     if (!nav) return;
-    nav.classList.toggle('scrolled', window.scrollY > 12);
+    const scrolled = window.scrollY > 12;
+    if (scrolled === navScrolled) return;
+    navScrolled = scrolled;
+    nav.classList.toggle('scrolled', scrolled);
   };
 
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
 
-  if (megaDropdown && window.matchMedia('(min-width: 992px)').matches) {
-    const toggle = megaDropdown.querySelector('[data-bs-toggle="dropdown"]');
-    if (toggle && window.bootstrap && window.bootstrap.Dropdown) {
-      const dropdown = window.bootstrap.Dropdown.getOrCreateInstance(toggle, { autoClose: 'outside' });
-      let hideTimer;
+  const desktopNav = window.matchMedia('(min-width: 992px)');
+  const megaToggle = megaDropdown && megaDropdown.querySelector('[data-bs-toggle="dropdown"]');
 
-      megaDropdown.addEventListener('mouseenter', () => {
-        clearTimeout(hideTimer);
-        dropdown.show();
-      });
+  // Desktop only: open the Visa mega-menu on hover (checked on every hover, so resizing is handled too).
+  if (megaToggle && window.bootstrap && window.bootstrap.Dropdown) {
+    const dropdown = window.bootstrap.Dropdown.getOrCreateInstance(megaToggle, { autoClose: 'outside' });
+    let hideTimer;
 
-      megaDropdown.addEventListener('mouseleave', () => {
-        hideTimer = window.setTimeout(() => dropdown.hide(), 180);
-      });
-    }
+    megaDropdown.addEventListener('mouseenter', () => {
+      if (!desktopNav.matches) return;
+      clearTimeout(hideTimer);
+      dropdown.show();
+    });
+
+    megaDropdown.addEventListener('mouseleave', () => {
+      if (!desktopNav.matches) return;
+      hideTimer = window.setTimeout(() => dropdown.hide(), 180);
+    });
+  }
+
+  // Mobile menu: tapping a link closes the menu, and closing the menu also folds the Visa list.
+  const mainNav = document.getElementById('mainNav');
+  if (mainNav && window.bootstrap && window.bootstrap.Collapse) {
+    mainNav.addEventListener('click', (event) => {
+      const link = event.target.closest('a[href]');
+      if (!link || link.hasAttribute('data-bs-toggle') || !mainNav.classList.contains('show')) return;
+      window.bootstrap.Collapse.getOrCreateInstance(mainNav, { toggle: false }).hide();
+    });
+
+    mainNav.addEventListener('hide.bs.collapse', (event) => {
+      if (event.target !== mainNav || !megaToggle || !window.bootstrap.Dropdown) return;
+      window.bootstrap.Dropdown.getInstance(megaToggle)?.hide();
+    });
   }
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -120,4 +143,87 @@ document.addEventListener('DOMContentLoaded', () => {
       button.innerHTML = button.dataset.originalHtml;
     });
   });
+
+  // Offers slider. Bootstrap handles the crossfade and the prev/next/dot controls; rotation is driven by the
+  // active dot's 5s progress fill (CSS), so pausing on hover/focus freezes the timer and the bar together.
+  const offersElement = document.getElementById('offersCarousel');
+  if (offersElement && window.bootstrap && window.bootstrap.Carousel) {
+    const offersCarousel = window.bootstrap.Carousel.getOrCreateInstance(offersElement, { interval: false, ride: false, pause: false });
+    const isMulti = offersElement.classList.contains('offers-carousel--multi');
+    const autoRotate = isMulti && !prefersReducedMotion;
+    const activeSlide = () => offersElement.querySelector('.carousel-item.active');
+    const hold = (on) => offersElement.classList.toggle('is-holding', on);
+    let offersInView = false;
+    let refocusSelector = null;
+
+    if (autoRotate) offersElement.classList.add('is-auto');
+
+    const pauseSlideMedia = (slide) => {
+      if (!slide) return;
+      slide.querySelectorAll('video').forEach((video) => video.pause());
+      slide.querySelectorAll('iframe').forEach((frame) => {
+        frame.contentWindow?.postMessage(JSON.stringify({ event: 'command', func: 'pauseVideo', args: [] }), '*');
+      });
+    };
+
+    const playSlideVideo = (slide) => {
+      const video = slide && slide.querySelector('video[data-offer-autoplay]');
+      if (video && offersInView && !prefersReducedMotion) video.play().catch(() => {});
+    };
+
+    offersElement.addEventListener('animationend', (event) => {
+      if (event.animationName === 'offerProgress' && autoRotate) offersCarousel.next();
+    });
+
+    // Uploaded videos hold the slider until they finish.
+    offersElement.querySelectorAll('video').forEach((video) => {
+      video.addEventListener('play', () => hold(true));
+      video.addEventListener('pause', () => {
+        if (!video.ended) hold(false);
+      });
+      video.addEventListener('ended', () => {
+        hold(false);
+        if (autoRotate) offersCarousel.next();
+      });
+    });
+
+    offersElement.addEventListener('slide.bs.carousel', (event) => {
+      // Each slide has its own copy of the controls; keep keyboard focus on the same control in the new slide.
+      const focused = document.activeElement;
+      refocusSelector = null;
+      if (focused && offersElement.contains(focused)) {
+        if (focused.dataset.bsSlide) refocusSelector = `[data-bs-slide="${focused.dataset.bsSlide}"]`;
+        else if (focused.dataset.bsSlideTo !== undefined) refocusSelector = `[data-bs-slide-to="${focused.dataset.bsSlideTo}"]`;
+      }
+      pauseSlideMedia(activeSlide());
+      hold(false);
+      // Restart the zoom-in / caption stagger on the incoming slide.
+      offersElement.querySelectorAll('.offer-slide.is-entering').forEach((slide) => slide.classList.remove('is-entering'));
+      void event.relatedTarget.offsetWidth;
+      event.relatedTarget.classList.add('is-entering');
+    });
+
+    offersElement.addEventListener('slid.bs.carousel', (event) => {
+      if (refocusSelector) event.relatedTarget.querySelector(refocusSelector)?.focus({ preventScroll: true });
+      refocusSelector = null;
+      playSlideVideo(event.relatedTarget);
+    });
+
+    // Clicking into a YouTube player moves focus into its iframe, which blurs this window.
+    window.addEventListener('blur', () => {
+      const focused = document.activeElement;
+      if (focused && focused.tagName === 'IFRAME' && offersElement.contains(focused)) hold(true);
+    });
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(([entry]) => {
+        offersInView = entry.isIntersecting;
+        if (offersInView) playSlideVideo(activeSlide());
+        else activeSlide()?.querySelectorAll('video').forEach((video) => video.pause());
+      }, { threshold: 0.4 }).observe(offersElement);
+    } else {
+      offersInView = true;
+      playSlideVideo(activeSlide());
+    }
+  }
 });

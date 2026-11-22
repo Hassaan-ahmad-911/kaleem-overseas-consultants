@@ -65,6 +65,50 @@
   </div>
 </section>
 
+{% if offers %}
+{% with offer_count=offers|length %}
+<section class="offers-section" id="offers">
+  <div class="offers-wrap">
+    <div class="offers-heading text-center reveal">
+      <span class="section-kicker">Offers &amp; Deals</span>
+      <h2 class="offers-heading__title">Latest Offers</h2>
+    </div>
+    <div id="offersCarousel" class="carousel carousel-fade offers-carousel reveal{% if offer_count > 1 %} offers-carousel--multi{% endif %}" aria-roledescription="carousel" aria-label="Latest offers">
+      <div class="carousel-inner">
+        {% for offer in offers %}
+          {% with current=forloop.counter0 %}
+          <div class="carousel-item offer-slide{% if forloop.first %} active{% endif %}" aria-roledescription="slide" aria-label="{{ forloop.counter }} of {{ offer_count }}">
+            <div class="offer-slide__grid">
+              {% include 'core/includes/offer_media.html' with autoplay=True eager=forloop.first %}
+              <div class="offer-caption">
+                {% if offer.discount_label %}<span class="offer-badge">{{ offer.discount_label }}</span>{% endif %}
+                <h3 class="offer-caption__title"><a href="{% url 'offers' %}#offer-{{ offer.pk }}">{{ offer.title }}</a></h3>
+                <p class="offer-caption__text">{{ offer.short_description }}</p>
+                {% include 'core/includes/offer_prices.html' %}
+                <div class="offer-controls">
+                  {% if offer_count > 1 %}
+                    <button type="button" class="offer-controls__arrow" data-bs-target="#offersCarousel" data-bs-slide="prev" aria-label="Previous offer"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
+                    <div class="offer-dots">
+                      {% for dot in offers %}
+                        <button type="button" class="offer-dot{% if forloop.counter0 == current %} is-current{% endif %}" data-bs-target="#offersCarousel" data-bs-slide-to="{{ forloop.counter0 }}" aria-label="Offer {{ forloop.counter }}: {{ dot.title }}"{% if forloop.counter0 == current %} aria-current="true"{% endif %}><span class="offer-dot__track"><span class="offer-dot__fill"></span></span></button>
+                      {% endfor %}
+                    </div>
+                    <button type="button" class="offer-controls__arrow" data-bs-target="#offersCarousel" data-bs-slide="next" aria-label="Next offer"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
+                  {% endif %}
+                  <a class="offer-controls__all" href="{% url 'offers' %}">View all <i class="fa-solid fa-arrow-right-long ms-1" aria-hidden="true"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endwith %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endwith %}
+{% endif %}
+
 <section class="section-pad why-choose-section">
   <div class="container">
     <div class="section-heading text-center reveal">
@@ -316,4 +360,8 @@
     </div>
   </div>
 </section>
+{% endblock %}
+
+{% block extra_js %}
+  {% if offers %}<script src="{% static 'js/offers.js' %}?v=20261122-1"></script>{% endif %}
 {% endblock %}

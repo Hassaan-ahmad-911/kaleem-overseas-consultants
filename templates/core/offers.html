@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Offers &amp; Deals | Kaleem Overseas Consultants Pvt. Ltd.{% endblock %}
+{% block content %}
+<section class="page-hero page-hero--offers">
+  <div class="container reveal">
+    <span class="page-hero__kicker"><i class="fa-solid fa-tags"></i> Limited time</span>
+    <h1 class="text-white">Offers &amp; Deals</h1>
+    <p class="text-white-50 mb-0">Current visa and travel offers. Book an appointment or message us on WhatsApp to claim one.</p>
+  </div>
+</section>
+<section class="section-pad">
+  <div class="container">
+    <div class="row g-4">
+      {% for offer in offers %}
+        <div class="col-lg-6 reveal">
+          <article class="offer-card h-100" id="offer-{{ offer.pk }}">
+            <div class="offer-card__frame">
+              {% include 'core/includes/offer_media.html' with autoplay=False eager=False %}
+            </div>
+            <div class="offer-card__body">
+              {% include 'core/includes/offer_body.html' with show_description=True %}
+            </div>
+          </article>
+        </div>
+      {% empty %}
+        <div class="col-12 reveal">
+          <div class="offers-empty">
+            <span class="offers-empty__icon"><i class="fa-solid fa-tags" aria-hidden="true"></i></span>
+            <h2>No offers right now</h2>
+            <p>New visa and travel offers are added regularly. Contact us to ask about current deals.</p>
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+              <a href="{% url 'book_appointment' %}" class="btn btn-apply-now">Book Appointment</a>
+              <a href="{{ site.whatsapp_url }}" class="btn btn-offer-whatsapp" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp me-2" aria-hidden="true"></i>Ask on WhatsApp</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/offers.js' %}?v=20261122-1"></script>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% comment %}Offer card text, prices, validity and actions on the Offers page. Params: offer, show_description.{% endcomment %}
+{% if offer.discount_label %}<span class="offer-badge">{{ offer.discount_label }}</span>{% endif %}
+<h3 class="offer-title">{{ offer.title }}</h3>
+<p class="offer-text">{{ offer.short_description }}</p>
+{% if show_description and offer.description %}<div class="offer-description">{{ offer.description|linebreaks }}</div>{% endif %}
+{% include 'core/includes/offer_prices.html' %}
+<div class="offer-actions">
+  <a href="{% url 'book_appointment' %}" class="btn btn-sm btn-apply-now"><i class="fa-solid fa-calendar-check me-2" aria-hidden="true"></i>Book Appointment</a>
+  <a href="https://wa.me/{{ site.whatsapp_number }}?text={{ offer.whatsapp_message|urlencode }}" class="btn btn-sm btn-offer-whatsapp" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp me-2" aria-hidden="true"></i>Ask on WhatsApp</a>
+</div>
